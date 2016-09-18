@@ -9,10 +9,6 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-/*
- * Original Code from https://github.com/paul-hammant/ngWebDriver
- */
-
 public class ByMobileResourceId  extends ByMobileHelper.BaseBy {
     private String resourceId;
 

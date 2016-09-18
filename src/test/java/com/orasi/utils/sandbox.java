@@ -5,10 +5,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.orasi.core.by.mobile.FindByMobile;
+import com.orasi.core.interfaces.Textbox;
 import com.orasi.utils.debugging.Highlight;
 
 public class sandbox extends TestEnvironment{
     private OrasiDriver driver = null;
+        @FindByMobile(resourceId="destination") private Textbox txtDestination;
         
         @BeforeMethod( alwaysRun=true)
        public void setup() {
