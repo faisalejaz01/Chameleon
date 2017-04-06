@@ -667,22 +667,4 @@ public class TestEnvironment {
 	    throw new AutomationException("OS is not in supported list of platforms: " + os);
 	}
     }
-
-
-    @BeforeMethod( alwaysRun=true)
-    public void setup() {
-	setPageURL("http://bluesourcestaging.herokuapp.com");
-	setApplicationUnderTest("Bluesource");
-	setBrowserUnderTest("chrome");
-	setBrowserVersion("");
-	setOperatingSystem("windows 10");
-	setRunLocation("local");
-	setTestEnvironment("");
-    }
-
-    @AfterMethod
-    public void clean(){
-	driver.quit();
-    }
-
 }
