@@ -29,8 +29,11 @@ public class Headers {
      *
      */
     public static enum HeaderType {
-        AUTH, BASIC_CONVO, JSON;
+        AUTH, BASIC_CONVO, JSON, AMC;
     }
+
+    private final static String AMC_HEADER = "X-AMC-Vendor-Key";
+    private final static String AMC_VENDOR_KEY = "F63B4995-F908-4D4B-8389-051D1F1C12BF";
 
     /**
      * Automatically populates headers based on predefined options from RestService.HeaderType
@@ -62,6 +65,18 @@ public class Headers {
                 headers = new Header[] {
                         new BasicHeader("Content-type", "application/json")
 
+                };
+                break;
+            case AMC:
+
+                logDebug("Creating headers for [AMC]");
+                headers = new Header[] {
+                        new BasicHeader("Content-type", "application/json;charset=utf-8"),
+                        new BasicHeader("Accept", "application/json"),
+                        new BasicHeader(AMC_HEADER, AMC_VENDOR_KEY),
+                        new BasicHeader("messageId", Randomness.generateMessageId()),
+                        new BasicHeader("Connection", "keep-alive"),
+                        new BasicHeader("requestedTimestamp", Randomness.generateCurrentXMLDatetime() + ".000-04:00")
                 };
                 break;
             default:
