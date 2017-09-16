@@ -3,42 +3,41 @@
 	<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
 	<link rel="stylesheet" type="text/css" href="./css/style.css">
 	<link rel="stylesheet" type="text/css" href="style.css">
-		 
+
 	<title>Unit test site</title>
 
-<script type="text/javascript" >
-
-</script>
-<link rel="stylesheet" href="./css/modalbox.css" type="text/css"> 
-<link rel="stylesheet" href="./css/modalbox.css" type="text/css"> 
+	<script type="text/javascript" >
+	</script>
+	<link rel="stylesheet" href="./css/modalbox.css" type="text/css">
+	<link rel="stylesheet" href="./css/modalbox.css" type="text/css">
 
 </head>
 <body>
 
 <div id="page">
-    
-  <div id="Header">
-    
-    <div id="header-bottom"></div>
- </div>
-<div id="container"> 
-<div id="Content">
-<h1 id="pageheader">Element test page</h1>
 
-                <table width="200">
-                  <tbody><tr>
-                    <td>
-                      <center>
-                        <input id="text1" type="text" value="Testing methods">
-                      </center>
-                    </td>
-                    <td>
-                      <center>
-                        <input id="buttonForText1" type="button" value="Populate Text" onclick="document.getElementById('text1').value = 'Clicked button'">
-                      </center>
-                    </td>
-                  </tr>
-                <tr>
+	<div id="Header">
+
+		<div id="header-bottom"></div>
+	</div>
+	<div id="container">
+		<div id="Content">
+			<h1 id="pageheader">Element test page</h1>
+
+			<table width="200">
+				<tbody><tr>
+					<td>
+						<center>
+							<input id="text1" type="text" value="Testing methods">
+						</center>
+					</td>
+					<td>
+						<center>
+							<input id="buttonForText1" type="button" value="Populate Text" onclick="document.getElementById('text1').value = 'Clicked button'">
+						</center>
+					</td>
+				</tr>
+				<tr>
 					<td>
 						<form id="radiogroup">
 							<input type="radio" name="sex" value="male" checked> Male</input>
@@ -47,6 +46,7 @@
 						</form>
 					</td>
 				</tr>
+<!--HIDDEN AND HIDING ELEMENTS-->
 				<tr>
 					<td>
 						<p id="hidden" hidden>I am hidden!</p>
@@ -57,19 +57,114 @@
 				</tr>
 				<tr>
 					<td>
+						<input type="button"  id="hidden-unhide" hidden value="I am not hidden!"></input>
+					</td>
+					<td>
+						<p><-- There is a hidden element here that will appear!</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="button"  id="shown-hidden" hidden value="I am about to hide!"></input>
+					</td>
+					<td>
+						<p><-- There is an element here that will be hidden!</p>
+					</td>
+				</tr>
+<!--DISABLED ELEMENTS-->
+				<tr>
+					<td>
 						<input type="button" id="disable" value="I am disabled!" disabled></input>
 					</td>
 					<td>
 						<p><-- There is a disabled element here!</p>
 					</td>
 				</tr>
-                </tbody></table>
-            
-</div>
 
-<div id="LeftBar"></div>
-<div style="clear:both"></div>
-</div>
+				<tr>
+					<td>
+						<input type="button" id="disable-enable" value="I am going to be enabled!" disabled></input>
+					</td>
+					<td>
+						<p><-- There is a disabled element here that will be enabled!</p>
+					</td>
+				</tr>
+				<tr>
+				<tr>
+					<td>
+						<input type="button" id="enable-disable" value="I am going to be disabled!" ></input>
+					</td>
+					<td>
+						<p><-- There is an enabled element here that will be disabled!</p>
+					</td>
+				</tr>
+<!--REMOVING ADDING TO DOM-->
+				<tr>
+					<td id='disappear-here'>
+						<input type="button" id="disappear" value="I am going to disappear!" ></input>
+					</td>
+					<td>
+						<p><-- This element will disappear!</p>
+					</td>
+				</tr>
+				<tr>
+					<td id='appear-here'>
+
+					</td>
+					<td>
+						<p><-- An Element will appear here!</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p id="change-text">a</p>
+					</td>
+					<td>
+						<p><-- An Element will change text here!</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type='button' id="change-value" value="a" disabled></input>
+					</td>
+					<td>
+						<p><-- An Element will change value here!</p>
+					</td>
+				</tr>
+				</tbody></table>
+
+		</div>
+
+		<div id="LeftBar"></div>
+		<div style="clear:both"></div>
+	</div>
 
 </div>
+<script>
+	setTimeout(function(){
+		document.getElementById('disable-enable').disabled = false;
+		document.getElementById('enable-disable').disabled = true;
+		document.getElementById('hidden-unhide').hidden = false;
+		document.getElementById('shown-hidden').hidden = true;
+		var elem = document.getElementById('disappear');
+		document.getElementById('disappear-here').removeChild(elem);
+		document.getElementById('appear-here').innerHTML = '<input type="button" id="appear" value="Suprise!" ></input>';
+	}, 3000);
+	var changeText = function(){
+		if (document.getElementById('change-text').innerHTML.length < 10){
+			document.getElementById('change-text').innerHTML = document.getElementById('change-text').innerHTML + 'a';
+
+		}
+	}
+	var changeValue = function(){
+		if (document.getElementById('change-value').value.length < 10){
+			document.getElementById('change-value').value = document.getElementById('change-value').value + 'a';
+
+		}else{
+			document.getElementById('change-value').disabled = false;
+		}
+	}
+	setInterval(changeText, 500)
+	setInterval(changeValue, 500)
+</script>
 </body></html>
