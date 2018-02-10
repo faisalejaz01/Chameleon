@@ -41,12 +41,13 @@ import com.orasi.web.exceptions.ElementNotHiddenException;
 import com.orasi.web.exceptions.ElementNotVisibleException;
 import com.orasi.web.exceptions.TextInElementNotPresentException;
 import com.orasi.web.webelements.Element;
+import com.orasi.web.webelements.SyncType;
 
 /**
  * An implementation of the Element interface. Delegates its work to an
  * underlying WebElement instance for custom functionality.
  */
-public class ElementImpl implements Element {
+public class ElementImpl<T> implements Element {
 
     protected WebElement element;
     protected By by;
@@ -74,6 +75,30 @@ public class ElementImpl implements Element {
         logTrace("Exiting ElementImpl#init");
     }
 
+    public Element sync(SyncType type) {
+        switch (type) {
+            case ENABLED:
+                syncEnabled();
+                break;
+            case DISABLED:
+                syncDisabled();
+                break;
+            case VISIBLE:
+                syncVisible();
+                break;
+            case HIDDEN:
+                syncHidden();
+                break;
+            case FRAME:
+                syncInFrame();
+                break;
+
+            default:
+                break;
+        }
+        return this;
+    }
+    
     /**
      * @see org.openqa.selenium.WebElement#click()
      */

@@ -7,8 +7,9 @@ import org.testng.annotations.Test;
 
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebBaseTest;
+import static com.orasi.web.webelements.SyncType.*;
 
-public class Sandbox extends WebBaseTest {
+public class Sandbox  {
 
     @BeforeMethod
     public void setup() {
@@ -28,9 +29,9 @@ public class Sandbox extends WebBaseTest {
     public void searchForOrasi() {
         // Create local instance of OrasiDriver for easier usage
         OrasiDriver driver = DriverManager.getDriver();
-        driver.findTextbox(By.xpath("//input[@title='Search']")).set("Orasi");
-        driver.findButton(By.name("btnK")).click();
-        driver.findLink(By.partialLinkText("Orasi Software, Inc.")).syncVisible();
+        driver.findTextbox(By.xpath("//input[@title='Search']")).sync(ENABLED).set("Orasi");
+        driver.findButton(By.name("btnK")).sync(ENABLED).click();
+        driver.findLink(By.partialLinkText("Orasi Software, Inc.")).sync(VISIBLE);
     }
 
     @AfterMethod

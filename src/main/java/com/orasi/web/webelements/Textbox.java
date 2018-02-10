@@ -8,6 +8,9 @@ import com.orasi.web.webelements.impl.internal.ImplementedBy;
  */
 @ImplementedBy(TextboxImpl.class)
 public interface Textbox extends Element {
+    
+    
+    public Textbox sync(SyncType type);
     /**
      * @see org.openqa.selenium.WebElement#clear()
      */

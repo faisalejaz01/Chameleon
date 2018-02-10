@@ -10,6 +10,8 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import com.orasi.web.OrasiDriver;
+import com.orasi.web.webelements.Element;
+import com.orasi.web.webelements.SyncType;
 import com.orasi.web.webelements.Textbox;
 
 /**
@@ -22,7 +24,6 @@ public class TextboxImpl extends ElementImpl implements Textbox {
      * @param element
      *            element to wrap up
      */
-
     public TextboxImpl(OrasiDriver driver, By by) {
         super(driver, by);
     }
@@ -30,11 +31,12 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     public TextboxImpl(OrasiDriver driver, By by, WebElement element) {
         super(driver, by, element);
     }
-    /*
-     * public TextboxImpl(OrasiDriver driver, ByNG byNg) {
-     * super(driver, byNg);
-     * }
-     */
+       
+    @Override
+    public Textbox sync(SyncType type) {
+        super.sync(type);
+        return this;
+    }
 
     /**
      * @summary - Gets the value of an input field. Overrides default clear().
