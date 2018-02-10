@@ -28,20 +28,20 @@ public class WebtableImpl extends ElementImpl implements Webtable {
         super(driver, by);
     }
 
-    private List<WebElement> getRowCollection() {
+    private List<Element> getRowCollection() {
         logTrace("Entering WebtableImpl#getRowCollection");
         driver.setElementTimeout(1, TimeUnit.SECONDS);
-        List<WebElement> rowCollection = reload().findElements(By.xpath("tr|tbody/tr"));
+        List<Element> rowCollection = reload().findElements(By.xpath("tr|tbody/tr"));
         driver.setElementTimeout(driver.getElementTimeout(), TimeUnit.SECONDS);
         logTrace("Exiting WebtableImpl#getRowCollection");
         return rowCollection;
 
     }
 
-    private List<WebElement> getColumnCollection(WebElement row) {
+    private List<Element> getColumnCollection(WebElement row) {
         logTrace("Entering WebtableImpl#getColumnCollection");
         driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
-        List<WebElement> columnCollection = row.findElements(By.xpath("th|td"));
+        List<Element> columnCollection = row.findElements(By.xpath("th|td"));
         driver.setElementTimeout(driver.getElementTimeout(), TimeUnit.SECONDS);
         logTrace("Exiting WebtableImpl#getColumnCollection");
         return columnCollection;
@@ -234,15 +234,15 @@ public class WebtableImpl extends ElementImpl implements Webtable {
         logTrace("Entering WebtableImpl#getRowWithCellText(String text, int columnPosition, int startRow, boolean exact)");
         int currentRow = 1, rowFound = 0;
 
-        List<WebElement> rowCollection = getRowCollection();
-        for (WebElement rowElement : rowCollection) {
+        List<Element> rowCollection = getRowCollection();
+        for (Element rowElement : rowCollection) {
             if (startRow > currentRow) {
                 currentRow++;
             } else {
                 if (currentRow <= rowCollection.size()) {
 
                     if (columnPosition == -1) {
-                        for (WebElement cell : getColumnCollection(rowElement)) {
+                        for (Element cell : getColumnCollection(rowElement)) {
                             if (exact) {
                                 if (cell.getText().trim().equals(text)) {
                                     logTrace("Exiting WebtableImpl#getRowWithCellText(String text, int columnPosition, int startRow, boolean exact)");
@@ -256,7 +256,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
                             }
                         }
                     } else {
-                        WebElement cell = rowElement.findElements(By.xpath("th|td")).get(columnPosition - 1);
+                        Element cell = rowElement.findElements(By.xpath("th|td")).get(columnPosition - 1);
                         if (exact) {
                             if (cell.getText().trim().equals(text)) {
                                 logTrace("Exiting WebtableImpl#getRowWithCellText(String text, int columnPosition, int startRow, boolean exact)");
@@ -313,8 +313,8 @@ public class WebtableImpl extends ElementImpl implements Webtable {
     public int getColumnWithCellText(String text, int rowPosition) {
         logTrace("Entering WebtableImpl#getColumnWithCellText(String text, int rowPosition)");
         int currentColumn = 1;
-        List<WebElement> columns = getColumnCollection(getRowCollection().get(rowPosition - 1));
-        for (WebElement cell : columns) {
+        List<Element> columns = getColumnCollection(getRowCollection().get(rowPosition - 1));
+        for (Element cell : columns) {
             if (currentColumn <= columns.size()) {
                 if (cell.getText().trim().equals(text)) {
                     logTrace("Exiting WebtableImpl#getColumnWithCellText(String text, int rowPosition)");

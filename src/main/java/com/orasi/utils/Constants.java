@@ -5,6 +5,9 @@ import java.util.logging.Level;
 
 public class Constants {
 
+    /** Location of data provider files in the project */
+    final static public String BLUESOURCE_DATAPROVIDER_PATH = "/excelsheets/bluesource/";
+
     /*
      * File system info
      */

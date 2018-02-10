@@ -20,7 +20,7 @@ public class TestCreditCard {
     @Features("Utilities")
     @Stories("CreditCard")
     @Title("creditCardsConstructor")
-    @Test(groups = { "regression", "utils", "CreditCard" })
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardPersonWillBillingConstructor" })
     public void creditCardConstructor() {
         CreditCard card = CreditCards.VISA();
         Assert.assertNotNull(card);
@@ -38,7 +38,7 @@ public class TestCreditCard {
     @Features("Utilities")
     @Stories("CreditCard")
     @Title("creditCardsConstructor")
-    @Test(groups = { "regression", "utils", "CreditCard" })
+    @Test(groups = { "regression", "utils", "CreditCard" }, dependsOnMethods = { "creditCardPersonConstructor" })
     public void creditCardPersonWillBillingConstructor() {
         Person peep = new Person();
         Address address = new Address();
