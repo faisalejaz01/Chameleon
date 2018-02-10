@@ -30,7 +30,7 @@ public class ManageTitlePage {
     }
 
     public boolean pageLoaded() {
-        return driver.page().isElementLoaded(this.getClass(), driver, txtTitle);
+        return driver.page().isElementLoaded(this.getClass(), txtTitle);
     }
 
     // *****************************************

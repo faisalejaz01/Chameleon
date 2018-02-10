@@ -69,7 +69,7 @@ public class EmployeeSummaryPage {
     }
 
     public boolean pageLoaded() {
-        return driver.page().isElementLoaded(this.getClass(), driver, lnkViewTimeOff);
+        return driver.page().isElementLoaded(this.getClass(), lnkViewTimeOff);
     }
     // *****************************************
     // ***Page Interactions ***
@@ -84,18 +84,21 @@ public class EmployeeSummaryPage {
     }
 
     public void viewGeneralInfo() {
-        if (lblGeneralInfoBody.getAttribute("class").equals("panel-collapse collapse"))
+        if (lblGeneralInfoBody.getAttribute("class").equals("panel-collapse collapse")) {
             lblGeneralInfo.click();
+        }
     }
 
     public void viewProjectsInfo() {
-        if (lblProjectInfoBody.getAttribute("class").equals("panel-collapse collapse"))
+        if (lblProjectInfoBody.getAttribute("class").equals("panel-collapse collapse")) {
             lblProjectInfo.click();
+        }
     }
 
     public void viewTimeOffInfo() {
-        if (lblTimeOffInfoBody.getAttribute("class").equals("panel-collapse collapse"))
+        if (lblTimeOffInfoBody.getAttribute("class").equals("panel-collapse collapse")) {
             lblTimeOffInfo.click();
+        }
     }
 
     // @Step("Then the Employees General Information is correct")
@@ -107,7 +110,7 @@ public class EmployeeSummaryPage {
      * int startTrim = url.lastIndexOf('/') + 1;
      * int employeeID = Integer.parseInt(url.substring(startTrim, url.length()));
      * EmployeeDetails apiEmployee = blueSource.employees().getEmployeeDetails(employeeID);
-     * 
+     *
      * if (!employee.getUsername().equalsIgnoreCase(apiEmployee.getUsername())) {
      * TestReporter.logFailure("User name in API did not match");
      * return false;
@@ -148,7 +151,7 @@ public class EmployeeSummaryPage {
      * TestReporter.logFailure("IM Client in API did not match");
      * return false;
      * }
-     * 
+     *
      * This items are returned as ID's
      * if (!employee.getDepartment().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te, DEPARTMENT, 2)))
      * {TestReporter.logFailure("Department did not match"); return false;}
@@ -156,7 +159,7 @@ public class EmployeeSummaryPage {
      * false;}
      * if (!employee.getManager().equalsIgnoreCase(tabGeneralInfoTable.getCellData(te, MANAGER, 2))) {TestReporter.logFailure("Manager did not match");
      * return false;}
-     * 
+     *
      * return true;
      * }
      */

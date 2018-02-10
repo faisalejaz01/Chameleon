@@ -31,12 +31,11 @@ public class LoginPage {
     // *********************
     public LoginPage() {
         this.driver = DriverManager.getDriver();
-        ;
         ElementFactory.initElements(driver, this);
     }
 
     public boolean pageLoaded() {
-        return driver.page().isElementLoaded(this.getClass(), driver, btnLogin);
+        return driver.page().isElementLoaded(this.getClass(), btnLogin);
     }
 
     // *****************************************
@@ -49,10 +48,12 @@ public class LoginPage {
         String password = "";
         final ResourceBundle userCredentialRepo = ResourceBundle.getBundle(Constants.USER_CREDENTIALS_PATH);
 
-        if (!role.toUpperCase().equals("SKIP_USER"))
+        if (!role.toUpperCase().equals("SKIP_USER")) {
             username = userCredentialRepo.getString("BLUESOURCE_" + role.toUpperCase());
-        if (!role.toUpperCase().equals("SKIP_PASSWORD"))
+        }
+        if (!role.toUpperCase().equals("SKIP_PASSWORD")) {
             password = userCredentialRepo.getString("BLUESOURCE_ENCODED_PASSWORD");
+        }
 
         txtUsername.set(username);
         txtPassword.setSecure(password);

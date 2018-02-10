@@ -46,7 +46,7 @@ public class ProjectsPage {
     }
 
     public boolean pageLoaded() {
-        return driver.page().isElementLoaded(this.getClass(), driver, txtSearch);
+        return driver.page().isElementLoaded(this.getClass(), txtSearch);
     }
 
     // *****************************************
@@ -88,8 +88,9 @@ public class ProjectsPage {
         BluesourceTables table = new BluesourceTables();
         String columnName = ProjectsTableColumns.valueOf(column).toString();
         // if((column.equals("CLIENTPARTNER")) && order.equals("ASCENDING")) order = "DESCENDING";
-        if ((column.equals("CLIENTPARTNER")) && order.equals("DESCENDING"))
+        if ((column.equals("CLIENTPARTNER")) && order.equals("DESCENDING")) {
             order = "ASCENDING";
+        }
         return table.validateSortColumn(columnName, SortOrder.valueOf(order));
     }
 
@@ -116,14 +117,14 @@ public class ProjectsPage {
     public void clickAddProjectButton() {
         loadingModal.syncHidden();
         btnAdd.jsClick();
-        driver.page().isDomComplete(driver);
+        driver.page().isDomComplete();
     }
 
     @Step("When I click the Show Inactive Button on the Projects Page")
     public void clickInactiveButton() {
         loadingModal.syncHidden();
         btnShowInactive.jsClick();
-        driver.page().isDomComplete(driver);
+        driver.page().isDomComplete();
     }
 
     @Step("Then the Projects table should update the projects displayed")

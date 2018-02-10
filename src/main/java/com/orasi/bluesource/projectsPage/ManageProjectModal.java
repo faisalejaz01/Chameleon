@@ -49,7 +49,7 @@ public class ManageProjectModal {
     }
 
     public boolean pageLoaded() {
-        return driver.page().isElementLoaded(this.getClass(), driver, txtName);
+        return driver.page().isElementLoaded(this.getClass(), txtName);
     }
 
     // *****************************************
@@ -89,10 +89,12 @@ public class ManageProjectModal {
     @Step("And I modify the Project Details")
     public void modifyProject(String projectName, String clientPartner, ArrayList<String> teamLeads, ArrayList<String> teamLeadsToRemove, String status, String startDate, String endDate) {
         lblAddProjectPopup.syncEnabled();
-        if (!txtName.getText().equalsIgnoreCase(projectName))
+        if (!txtName.getText().equalsIgnoreCase(projectName)) {
             txtName.set(clientPartner);
-        if (!lstClientPartner.getFirstSelectedOption().getText().equalsIgnoreCase(clientPartner))
+        }
+        if (!lstClientPartner.getFirstSelectedOption().getText().equalsIgnoreCase(clientPartner)) {
             lstClientPartner.select(clientPartner);
+        }
         if (teamLeads.size() > 0) {
             boolean leadFound = false;
             for (String teamLead : teamLeads) {
@@ -122,12 +124,15 @@ public class ManageProjectModal {
                 }
             }
         }
-        if (!lstStatus.getFirstSelectedOption().getText().equalsIgnoreCase(status))
+        if (!lstStatus.getFirstSelectedOption().getText().equalsIgnoreCase(status)) {
             lstStatus.select(status);
-        if (!txtProjectStartDate.getText().equalsIgnoreCase(startDate))
+        }
+        if (!txtProjectStartDate.getText().equalsIgnoreCase(startDate)) {
             txtProjectStartDate.set(startDate);
-        if (!txtProjectEndDate.getText().equalsIgnoreCase(endDate))
+        }
+        if (!txtProjectEndDate.getText().equalsIgnoreCase(endDate)) {
             txtProjectEndDate.set(endDate);
+        }
 
         // submit
         btnSave.syncEnabled();
@@ -165,8 +170,9 @@ public class ManageProjectModal {
     private boolean isOptionAvailible(Listbox listbox, String name) {
         List<WebElement> allOptions = listbox.getOptions();
         for (WebElement option : allOptions) {
-            if (option.getText().equals(name))
+            if (option.getText().equals(name)) {
                 return true;
+            }
         }
         return false;
     }

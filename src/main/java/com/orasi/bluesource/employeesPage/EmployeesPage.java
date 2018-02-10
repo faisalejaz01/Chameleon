@@ -60,7 +60,7 @@ public class EmployeesPage {
     }
 
     public boolean isDomComplete() {
-        return driver.page().isElementLoaded(this.getClass(), driver, txtSearch);
+        return driver.page().isElementLoaded(this.getClass(), txtSearch);
     }
 
     // *****************************************
@@ -127,14 +127,14 @@ public class EmployeesPage {
     public void clickAllButton() {
         loadingModal.syncHidden();
         btnAll.click();
-        driver.page().isDomComplete(driver);
+        driver.page().isDomComplete();
     }
 
     @Step("Click the Add Button on the Employees Page")
     public void clickAddEmployeeButton() {
         loadingModal.syncHidden(10);
         btnAdd.jsClick();
-        driver.page().isDomComplete(driver);
+        driver.page().isDomComplete();
     }
 
     @Step("Click the Show All Label on the Employees Page")
@@ -143,7 +143,7 @@ public class EmployeesPage {
         btnAll.click();
         lblAll.syncVisible();
         lblAll.click();
-        driver.page().isDomComplete(driver);
+        driver.page().isDomComplete();
     }
 
     @Step("Click the Show Direct Label on the Employees Page")
@@ -152,7 +152,7 @@ public class EmployeesPage {
         btnAll.click();
         lblDirect.syncVisible();
         lblDirect.click();
-        driver.page().isDomComplete(driver);
+        driver.page().isDomComplete();
     }
 
     @Step("Check the Show Inactive Checkbox on the Employees Page")
@@ -161,7 +161,7 @@ public class EmployeesPage {
         btnAll.click();
         chkShowInactive.syncVisible();
         chkShowInactive.check();
-        driver.page().isDomComplete(driver);
+        driver.page().isDomComplete();
     }
 
     @Step("Uncheck the Show Inactive Checkbox on the Employees Page")
@@ -170,7 +170,7 @@ public class EmployeesPage {
         btnAll.click();
         chkShowInactive.syncVisible();
         chkShowInactive.uncheck();
-        driver.page().isDomComplete(driver);
+        driver.page().isDomComplete();
     }
 
     @Step("The Employees table should update the employees displayed")

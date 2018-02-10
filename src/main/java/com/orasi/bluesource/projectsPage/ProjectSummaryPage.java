@@ -39,7 +39,7 @@ public class ProjectSummaryPage {
     }
 
     public boolean pageLoaded() {
-        return driver.page().isElementLoaded(this.getClass(), driver, tabProjectInfoTable);
+        return driver.page().isElementLoaded(this.getClass(), tabProjectInfoTable);
     }
     // *****************************************
     // ***Page Interactions ***

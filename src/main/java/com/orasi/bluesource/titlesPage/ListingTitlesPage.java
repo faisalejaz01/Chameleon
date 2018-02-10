@@ -41,7 +41,7 @@ public class ListingTitlesPage {
     }
 
     public boolean pageLoaded() {
-        return driver.page().isElementLoaded(this.getClass(), driver, lnkNewTitle);
+        return driver.page().isElementLoaded(this.getClass(), lnkNewTitle);
     }
 
     // *****************************************
@@ -77,8 +77,9 @@ public class ListingTitlesPage {
 
     @Step("The title \"{0}\" should be found on the Titles table")
     public boolean searchTableByTitle(String title) {
-        if (getTitleRowPosition(title) > 0)
+        if (getTitleRowPosition(title) > 0) {
             return true;
+        }
         return false;
     }
 
@@ -110,7 +111,7 @@ public class ListingTitlesPage {
      * blueSource.titles().deleteTitle(tempTitle);
      * }
      * TestReporter.log("The title of \"" + title + "\" previously existed. Deleting previous title");
-     * 
+     *
      * }
      * }
      */

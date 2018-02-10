@@ -63,7 +63,7 @@ public class ManageEmployeeModal {
     }
 
     public boolean pageLoaded() {
-        return driver.page().isElementLoaded(this.getClass(), driver, txtUsername);
+        return driver.page().isElementLoaded(this.getClass(), txtUsername);
     }
 
     // *****************************************
@@ -111,36 +111,51 @@ public class ManageEmployeeModal {
             String email, String imName, String imClient, String dept) {
         lblAddEmployeePopup.syncEnabled();
 
-        if (!txtUsername.getText().equalsIgnoreCase(username))
+        if (!txtUsername.getText().equalsIgnoreCase(username)) {
             txtUsername.set(username);
-        if (!txtFirstName.getText().equalsIgnoreCase(firstName))
+        }
+        if (!txtFirstName.getText().equalsIgnoreCase(firstName)) {
             txtFirstName.set(firstName);
-        if (!txtLastName.getText().equalsIgnoreCase(lastName))
+        }
+        if (!txtLastName.getText().equalsIgnoreCase(lastName)) {
             txtLastName.set(lastName);
-        if (!lstTitle.getFirstSelectedOption().getText().equalsIgnoreCase(title))
+        }
+        if (!lstTitle.getFirstSelectedOption().getText().equalsIgnoreCase(title)) {
             lstTitle.select(title);
-        if (!lstRole.getFirstSelectedOption().getText().equalsIgnoreCase(role))
+        }
+        if (!lstRole.getFirstSelectedOption().getText().equalsIgnoreCase(role)) {
             lstRole.select(role);
-        if (!lstManager.getFirstSelectedOption().getText().equalsIgnoreCase(manager))
+        }
+        if (!lstManager.getFirstSelectedOption().getText().equalsIgnoreCase(manager)) {
             lstManager.select(manager);
-        if (!lstStatus.getFirstSelectedOption().getText().equalsIgnoreCase(status))
+        }
+        if (!lstStatus.getFirstSelectedOption().getText().equalsIgnoreCase(status)) {
             lstStatus.select(status);
-        if (!lstLocation.getFirstSelectedOption().getText().equalsIgnoreCase(location))
+        }
+        if (!lstLocation.getFirstSelectedOption().getText().equalsIgnoreCase(location)) {
             lstLocation.select(location);
-        if (!txtStartDate.getText().equalsIgnoreCase(startDate))
+        }
+        if (!txtStartDate.getText().equalsIgnoreCase(startDate)) {
             txtStartDate.safeSet(startDate);
-        if (!txtCellPhone.getText().equalsIgnoreCase(cellPhone))
+        }
+        if (!txtCellPhone.getText().equalsIgnoreCase(cellPhone)) {
             txtCellPhone.set(cellPhone);
-        if (!txtOfficePhone.getText().equalsIgnoreCase(officePhone))
+        }
+        if (!txtOfficePhone.getText().equalsIgnoreCase(officePhone)) {
             txtOfficePhone.set(officePhone);
-        if (!txtEmail.getText().equalsIgnoreCase(email))
+        }
+        if (!txtEmail.getText().equalsIgnoreCase(email)) {
             txtEmail.set(email);
-        if (!txtImName.getText().equalsIgnoreCase(imName))
+        }
+        if (!txtImName.getText().equalsIgnoreCase(imName)) {
             txtImName.set(imName);
-        if (!lstImClient.getFirstSelectedOption().getText().equalsIgnoreCase(imClient))
+        }
+        if (!lstImClient.getFirstSelectedOption().getText().equalsIgnoreCase(imClient)) {
             lstImClient.select(imClient);
-        if (!lstDept.getFirstSelectedOption().getText().equalsIgnoreCase(dept))
+        }
+        if (!lstDept.getFirstSelectedOption().getText().equalsIgnoreCase(dept)) {
             lstDept.select(dept);
+        }
 
         // submit
         btnSave.syncEnabled();

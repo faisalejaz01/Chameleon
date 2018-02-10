@@ -14,7 +14,7 @@ import com.orasi.web.webelements.impl.internal.ElementFactory;
 
 /**
  * @author justin.phlegar@orasi.com
- * 
+ *
  * @doc.description
  *                  Class for handling the common table element seen on the Bluesource site. Contains methods
  *                  that are common and valid for all tables on site.
@@ -32,7 +32,7 @@ public class BluesourceTables {
     private OrasiDriver driver = null;
 
     /**
-     * 
+     *
      * @param {@link
      *            TestEnvironment} te
      * @doc.description If only TestEnvironment is passed in, use PageFactory method to find the WebTable element
@@ -44,7 +44,7 @@ public class BluesourceTables {
     }
 
     /**
-     * 
+     *
      * @param {@link
      *            TestEnvironment} te
      * @param {@link
@@ -64,7 +64,7 @@ public class BluesourceTables {
     }
 
     /**
-     * 
+     *
      * @param String
      *            column - Column name to search for
      * @return int - column position
@@ -75,7 +75,7 @@ public class BluesourceTables {
     }
 
     /**
-     * 
+     *
      * @param String
      *            column - Column name to sort on
      * @param {@link
@@ -98,16 +98,18 @@ public class BluesourceTables {
 
         String currentOrder = cell.findElement(By.cssSelector("span.glyphicon-sort-by-alphabet")).getAttribute("ng-show");
         if (order == SortOrder.ASCENDING) {
-            if (currentOrder.equals("reverse==false"))
+            if (currentOrder.equals("reverse==false")) {
                 cellLink.click();
+            }
         } else {
-            if (currentOrder.equals("reverse==true"))
+            if (currentOrder.equals("reverse==true")) {
                 cellLink.click();
+            }
         }
     }
 
     /**
-     * 
+     *
      * @param String
      *            column - Name of the column to validate
      * @param {@link
@@ -141,7 +143,7 @@ public class BluesourceTables {
             if (currentRow == numberRows + 1) {
                 currentRow = 2;
                 movedPage = Pagination.moveNext();
-                driver.page().isDomComplete(driver);
+                driver.page().isDomComplete();
                 numberRows = table.getRowCount();
             }
         } while (movedPage);
@@ -181,8 +183,9 @@ public class BluesourceTables {
         int row = 0;
         int columnPosition = getColumnPosition(column);
         row = table.getRowWithCellText(text, columnPosition, 2, false);
-        if (row != 0)
+        if (row != 0) {
             return true;
+        }
         return false;
     }
 

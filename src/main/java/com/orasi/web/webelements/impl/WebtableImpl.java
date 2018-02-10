@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.webelements.Element;
@@ -38,7 +37,7 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 
     }
 
-    private List<Element> getColumnCollection(WebElement row) {
+    private List<Element> getColumnCollection(Element row) {
         logTrace("Entering WebtableImpl#getColumnCollection");
         driver.setElementTimeout(1, TimeUnit.MILLISECONDS);
         List<Element> columnCollection = row.findElements(By.xpath("th|td"));

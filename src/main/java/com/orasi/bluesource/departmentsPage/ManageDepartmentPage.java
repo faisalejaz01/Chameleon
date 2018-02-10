@@ -34,7 +34,7 @@ public class ManageDepartmentPage {
     }
 
     public boolean pageLoaded() {
-        return driver.page().isElementLoaded(this.getClass(), driver, btnCreateDept);
+        return driver.page().isElementLoaded(this.getClass(), btnCreateDept);
     }
 
     // *****************************************
@@ -69,8 +69,9 @@ public class ManageDepartmentPage {
 
     @Step("The parent department \"{0}\" was saved")
     public boolean validateCorrectParentDepartment(String parentDepartment) {
-        if (lstParentDept.getFirstSelectedOption().getText().trim().equalsIgnoreCase(parentDepartment))
+        if (lstParentDept.getFirstSelectedOption().getText().trim().equalsIgnoreCase(parentDepartment)) {
             return true;
+        }
         return false;
     }
 
@@ -81,8 +82,9 @@ public class ManageDepartmentPage {
 
     @Step("The increment hours \"{0}\" was saved")
     public boolean validateCorrectIncrementHours(String incrementHours) {
-        if (lstHourIncrement.getFirstSelectedOption().getText().trim().equalsIgnoreCase(incrementHours))
+        if (lstHourIncrement.getFirstSelectedOption().getText().trim().equalsIgnoreCase(incrementHours)) {
             return true;
+        }
         return false;
     }
 
