@@ -59,7 +59,7 @@ public class EmployeesPage {
         ElementFactory.initElements(driver, this);
     }
 
-    public boolean isDomComplete() {
+    public boolean pageLoaded() {
         return driver.page().isElementLoaded(this.getClass(), txtSearch);
     }
 
@@ -168,6 +168,7 @@ public class EmployeesPage {
     public void uncheckInactiveCheckbox() {
         loadingModal.syncHidden();
         btnAll.click();
+        driver.page().isDomComplete();
         chkShowInactive.syncVisible();
         chkShowInactive.uncheck();
         driver.page().isDomComplete();

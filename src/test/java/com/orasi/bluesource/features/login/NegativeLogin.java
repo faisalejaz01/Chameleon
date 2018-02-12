@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 import com.orasi.bluesource.LoginPage;
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestReporter;
-import com.orasi.utils.dataProviders.ExcelDataProvider;
+import com.orasi.utils.dataProviders.CSVDataProvider;
 import com.orasi.web.WebBaseTest;
 
 import ru.yandex.qatools.allure.annotations.Features;
@@ -19,7 +19,7 @@ import ru.yandex.qatools.allure.model.SeverityLevel;
 public class NegativeLogin extends WebBaseTest {
     @DataProvider(name = "negativeDataScenario", parallel = true)
     public Object[][] negativeScenarios() {
-        return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH + "Login.xlsx", "LoginNegative").getTestData();
+        return CSVDataProvider.getData(Constants.BLUESOURCE_DATAPROVIDER_PATH + "LoginNegative.csv");
     }
 
     @Features("Login")

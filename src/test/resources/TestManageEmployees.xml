@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite" parallel="tests"  data-provider-thread-count="1">
+	<parameter name="browserUnderTest" value="firefox" />
+	<parameter name="environment" value="qa" />
+	<parameter name="runLocation" value="local" />
+	<parameter name="browserVersion" value="" />
+	<parameter name="operatingSystem" value="" />
+	<parameter name="debugLevel" value="1" />
+	<test name="Test">
+		<packages>
+			<package name="com.orasi.bluesource.features.manageEmployees.*">
+			</package>
+		</packages>
+		
+	</test> <!-- Test -->
+</suite> <!-- Suite -->

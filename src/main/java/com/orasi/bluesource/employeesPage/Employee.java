@@ -2,11 +2,8 @@ package com.orasi.bluesource.employeesPage;
 
 import com.orasi.utils.dataHelpers.personFactory.Person;
 
-public class Employee {
-    private String username;
-    private String firstName;
-    private String lastName;
-    private String title;
+public class Employee extends Person {
+    private String employeeTitle;
     private String role;
     private String manager;
     private String status;
@@ -15,25 +12,30 @@ public class Employee {
     private String startDate;
     private String cellPhone;
     private String officePhone;
-    private String email;
     private String imName;
     private String imClient;
     private String department;
 
-    public String getUsername() {
-        return username;
+    public Employee() {
+        super();
+        addPhone();
+        getAllPhones().get(0).setType("Cell");
+        this.employeeTitle = "Contractor";
+        this.role = "Base";
+        this.manager = "Company Admin";
+        this.status = "Contractor";
+        this.bridgeTime = "1";
+        this.location = "Remote";
+        this.startDate = "2013-01-20";
+        this.cellPhone = getAllPhones().get(0).getFormattedNumber("(###) ###-####");
+        this.officePhone = getAllPhones().get(1).getFormattedNumber("(###) ###-####");
+        this.imName = primaryEmail().getEmail();
+        this.imClient = "Skype";
+        this.department = "Rural Testing";
     }
 
-    public String getFirstName() {
-        return firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
-    }
-
-    public String getLastName() {
-        return lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
-    }
-
-    public String getTitle() {
-        return title;
+    public String getEmployeeTitle() {
+        return employeeTitle;
     }
 
     public String getRole() {
@@ -69,10 +71,6 @@ public class Employee {
         return officePhone;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public String getImName() {
         return imName;
     }
@@ -85,20 +83,8 @@ public class Employee {
         return department;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setEmployeeTitle(String employeeTitle) {
+        this.employeeTitle = employeeTitle;
     }
 
     public void setRole(String role) {
@@ -133,10 +119,6 @@ public class Employee {
         this.officePhone = officePhone;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public void setImName(String imName) {
         this.imName = imName;
     }
@@ -147,25 +129,5 @@ public class Employee {
 
     public void setDepartment(String department) {
         this.department = department;
-    }
-
-    public Employee() {
-        Person person = new Person();
-        setFirstName(person.getFirstName());
-        setLastName(person.getLastName());
-        this.username = getFirstName() + "." + getLastName();
-        this.title = "Contractor";
-        this.role = "Base";
-        this.manager = "Company Admin";
-        this.status = "Contractor";
-        this.bridgeTime = "1";
-        this.location = "Remote";
-        this.startDate = "2013-01-20";
-        this.cellPhone = "(336) 358-1321";
-        this.officePhone = "(336) 358-1321";
-        this.email = getUsername() + "@random.com";
-        this.imName = getEmail();
-        this.imClient = "Skype";
-        this.department = "Rural Testing";
     }
 }

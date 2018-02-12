@@ -165,71 +165,37 @@ public class EmployeeSummaryPage {
      */
 
     @Step("Then the Employees General Information is correct")
-    public boolean validateGeneralInfo(Employee employee) {
+    public void validateGeneralInfo() {
+        driver.page().isDomComplete();
         viewGeneralInfo();
-
+        Employee employee = (Employee) driver.data().get("employee");
         String convertedStartDate = DateTimeConversion.convert(employee.getStartDate(), "yyyy-MM-dd", "MMMM dd, yyyy");
 
-        if (!employee.getUsername().equalsIgnoreCase(tabGeneralInfoTable.getCellData(USERNAME, 2))) {
-            TestReporter.logFailure("User name did not match");
-            return false;
-        }
-        if (!employee.getRole().equalsIgnoreCase(tabGeneralInfoTable.getCellData(ROLE, 2))) {
-            TestReporter.logFailure("Role did not match");
-            return false;
-        }
-        if (!employee.getTitle().equalsIgnoreCase(tabGeneralInfoTable.getCellData(TITLE, 2))) {
-            TestReporter.logFailure("Title did not match");
-            return false;
-        }
-        if (!employee.getManager().equalsIgnoreCase(tabGeneralInfoTable.getCellData(MANAGER, 2))) {
-            TestReporter.logFailure("Manager did not match");
-            return false;
-        }
-        if (!employee.getStatus().equalsIgnoreCase(tabGeneralInfoTable.getCellData(STATUS, 2))) {
-            TestReporter.logFailure("Status did not match");
-            return false;
-        }
-        if (!employee.getLocation().equalsIgnoreCase(tabGeneralInfoTable.getCellData(LOCATION, 2))) {
-            TestReporter.logFailure("Location did not match");
-            return false;
-        }
-        if (!convertedStartDate.equals(tabGeneralInfoTable.getCellData(START_DATE, 2))) {
-            TestReporter.logFailure("Start Date did not match");
-            return false;
-        }
-        // if (!employee.getStartDate().equalsIgnoreCase(tabGeneralInfoTable.getCellData( TIME_WITH_ORASI, 2))) {TestReporter.logFailure("Time With Orasi did
-        // not match"); return false;}
-        if (!employee.getCellPhone().equalsIgnoreCase(tabGeneralInfoTable.getCellData(CELLPHONE, 2))) {
-            TestReporter.logFailure("Cell Phone did not match");
-            return false;
-        }
-        if (!employee.getOfficePhone().equalsIgnoreCase(tabGeneralInfoTable.getCellData(OFFICEPHONE, 2))) {
-            TestReporter.logFailure("Office Phone did not match");
-            return false;
-        }
-        if (!employee.getEmail().equalsIgnoreCase(tabGeneralInfoTable.getCellData(EMAIL, 2))) {
-            TestReporter.logFailure("Email did not match");
-            return false;
-        }
-        if (!employee.getImName().equalsIgnoreCase(tabGeneralInfoTable.getCellData(IM_USER, 2))) {
-            TestReporter.logFailure("IM Username did not match");
-            return false;
-        }
-        if (!employee.getImClient().equalsIgnoreCase(tabGeneralInfoTable.getCellData(IM_CLIENT, 2))) {
-            TestReporter.logFailure("IM Client did not match");
-            return false;
-        }
-        if (!employee.getDepartment().equalsIgnoreCase(tabGeneralInfoTable.getCellData(DEPARTMENT, 2))) {
-            TestReporter.logFailure("Department did not match");
-            return false;
-        }
+        TestReporter.logStep("Validate Employee Data on table");
+        validateTableData(employee.getUsername(), USERNAME, "Username");
+        validateTableData(employee.getRole(), ROLE, "Role");
+        validateTableData(employee.getEmployeeTitle(), TITLE, "Title");
+        validateTableData(employee.getManager(), MANAGER, "Manager");
+        validateTableData(employee.getStatus(), STATUS, "Status");
+        validateTableData(employee.getLocation(), LOCATION, "Location");
+        validateTableData(convertedStartDate, START_DATE, "Start Date");
+        validateTableData(employee.getCellPhone(), CELLPHONE, "Cell Phone");
+        validateTableData(employee.getOfficePhone(), OFFICEPHONE, "Office Phone");
+        validateTableData(employee.primaryEmail().getEmail(), EMAIL, "Email");
+        validateTableData(employee.getImName(), IM_USER, "IM User");
+        validateTableData(employee.getImClient(), IM_CLIENT, "IM Client");
+        validateTableData(employee.getDepartment(), DEPARTMENT, "Department");
+        TestReporter.assertAll();
+    }
 
-        return true;
+    private void validateTableData(String expectedInfo, int column, String desc) {
+        String data = tabGeneralInfoTable.getCellData(column, 2);
+        TestReporter.softAssertTrue(expectedInfo.equalsIgnoreCase(data), desc + " did on table [ " + data + " ] did matches expected [ " + expectedInfo + " ]");
     }
 
     @Step("When I click Manage General Info")
     public void clickManageGeneralInfo() {
+        btnManageGeneralInfo.syncEnabled();
         btnManageGeneralInfo.jsClick();
     }
 }

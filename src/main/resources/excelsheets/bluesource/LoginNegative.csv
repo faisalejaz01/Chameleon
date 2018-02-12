@@ -1,0 +1,4 @@
+﻿TestScenario,Role
+Negative: Login with invalid user,INVALID_USER
+Negative: Login without username,SKIP_USER
+Negative: Login without password,SKIP_PASSWORD

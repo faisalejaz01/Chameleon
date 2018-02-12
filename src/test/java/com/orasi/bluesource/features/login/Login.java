@@ -7,7 +7,7 @@ import com.orasi.bluesource.LoginPage;
 import com.orasi.bluesource.commons.TopNavigationBar;
 import com.orasi.utils.Constants;
 import com.orasi.utils.TestReporter;
-import com.orasi.utils.dataProviders.ExcelDataProvider;
+import com.orasi.utils.dataProviders.CSVDataProvider;
 import com.orasi.web.WebBaseTest;
 
 import ru.yandex.qatools.allure.annotations.Features;
@@ -21,7 +21,7 @@ public class Login extends WebBaseTest {
 
     @DataProvider(name = "dataScenario")
     public Object[][] scenarios() {
-        return new ExcelDataProvider(Constants.BLUESOURCE_DATAPROVIDER_PATH + "Login.xlsx", "Login").getTestData();
+        return CSVDataProvider.getData(Constants.BLUESOURCE_DATAPROVIDER_PATH + "Login.csv");
     }
 
     @Features("Login")
@@ -40,8 +40,8 @@ public class Login extends WebBaseTest {
         TestReporter.assertTrue(loginPage.pageLoaded(), "Verify login page is displayed");
         loginPage.login(role);
 
-        TestReporter.logStep("Verify successful login");
         // Verify user is logged in
+        TestReporter.logStep("Verify successful login");
         TopNavigationBar topNavigationBar = new TopNavigationBar();
         TestReporter.assertTrue(topNavigationBar.isLoggedIn(), "Validate the user logged in successfully");
 

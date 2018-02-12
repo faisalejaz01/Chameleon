@@ -72,100 +72,88 @@ public class ManageEmployeeModal {
 
     // adds a new employee on the new employee page
     @Step("And I add a new Employee")
-    public void addEmployee(String username, String firstName, String lastName, String title, String role, String manager,
-            String status, String location, String startDate, String cellPhone, String officePhone,
-            String email, String imName, String imClient, String dept) {
+    public void addEmployee() {
         lblAddEmployeePopup.syncEnabled();
-
+        Employee employee = (Employee) driver.data().get("employee");
         // Fill in the details
-        txtUsername.set(username);
-        txtFirstName.set(firstName);
-        txtLastName.set(lastName);
-        lstTitle.select(title);
-        lstRole.select(role);
-        lstManager.select(manager);
-        lstStatus.select(status);
-        lstLocation.select(location);
-        txtStartDate.jsSet(startDate);
-        txtCellPhone.set(cellPhone);
-        txtOfficePhone.set(officePhone);
-        txtEmail.set(email);
-        txtImName.set(imName);
-        lstImClient.select(imClient);
-        lstDept.select(dept);
+        txtUsername.set(employee.getUsername());
+        txtFirstName.set(employee.getFirstName());
+        txtLastName.set(employee.getLastName());
+        lstTitle.select(employee.getEmployeeTitle());
+        lstRole.select(employee.getRole());
+        lstManager.select(employee.getManager());
+        lstStatus.select(employee.getStatus());
+        lstLocation.select(employee.getLocation());
+        txtStartDate.jsSet(employee.getStartDate());
+        txtCellPhone.set(employee.getCellPhone());
+        txtOfficePhone.set(employee.getOfficePhone());
+        txtEmail.set(employee.primaryEmail().getEmail());
+        txtImName.set(employee.getImName());
+        lstImClient.select(employee.getImClient());
+        lstDept.select(employee.getDepartment());
 
         // submit
         btnSave.syncEnabled();
         btnSave.submit();
-    }
-
-    public void addEmployee(Employee employee) {
-        addEmployee(employee.getUsername(), employee.getFirstName(), employee.getLastName(), employee.getTitle(), employee.getRole(), employee.getManager(),
-                employee.getStatus(), employee.getLocation(), employee.getStartDate(), employee.getCellPhone(), employee.getOfficePhone(), employee.getEmail(),
-                employee.getImName(), employee.getImClient(), employee.getDepartment());
     }
 
     @Step("And I modify the Employee Details")
-    public void modifyEmployee(String username, String firstName, String lastName, String title, String role, String manager,
-            String status, String location, String startDate, String cellPhone, String officePhone,
-            String email, String imName, String imClient, String dept) {
+    public void modifyEmployee() {
+
+        Employee employee = (Employee) driver.data().get("employee");
         lblAddEmployeePopup.syncEnabled();
 
-        if (!txtUsername.getText().equalsIgnoreCase(username)) {
-            txtUsername.set(username);
+        if (!txtUsername.getText().equalsIgnoreCase(employee.getUsername())) {
+            txtUsername.set(employee.getUsername());
         }
-        if (!txtFirstName.getText().equalsIgnoreCase(firstName)) {
-            txtFirstName.set(firstName);
+        if (!txtFirstName.getText().equalsIgnoreCase(employee.getFirstName())) {
+            txtFirstName.set(employee.getFirstName());
         }
-        if (!txtLastName.getText().equalsIgnoreCase(lastName)) {
-            txtLastName.set(lastName);
+        if (!txtLastName.getText().equalsIgnoreCase(employee.getLastName())) {
+            txtLastName.set(employee.getLastName());
         }
-        if (!lstTitle.getFirstSelectedOption().getText().equalsIgnoreCase(title)) {
-            lstTitle.select(title);
+        if (!lstTitle.getFirstSelectedOption().getText().equalsIgnoreCase(employee.getEmployeeTitle())) {
+            lstTitle.select(employee.getEmployeeTitle());
         }
-        if (!lstRole.getFirstSelectedOption().getText().equalsIgnoreCase(role)) {
-            lstRole.select(role);
+        if (!lstRole.getFirstSelectedOption().getText().equalsIgnoreCase(employee.getRole())) {
+            lstRole.select(employee.getRole());
         }
-        if (!lstManager.getFirstSelectedOption().getText().equalsIgnoreCase(manager)) {
-            lstManager.select(manager);
+        if (!lstManager.getFirstSelectedOption().getText().equalsIgnoreCase(employee.getManager())) {
+            lstManager.select(employee.getManager());
         }
-        if (!lstStatus.getFirstSelectedOption().getText().equalsIgnoreCase(status)) {
-            lstStatus.select(status);
+        if (!lstStatus.getFirstSelectedOption().getText().equalsIgnoreCase(employee.getStatus())) {
+            lstStatus.select(employee.getStatus());
         }
-        if (!lstLocation.getFirstSelectedOption().getText().equalsIgnoreCase(location)) {
-            lstLocation.select(location);
+        if (!lstLocation.getFirstSelectedOption().getText().equalsIgnoreCase(employee.getLocation())) {
+            lstLocation.select(employee.getLocation());
         }
-        if (!txtStartDate.getText().equalsIgnoreCase(startDate)) {
-            txtStartDate.safeSet(startDate);
+        if (!txtStartDate.getText().equalsIgnoreCase(employee.getStartDate())) {
+            txtStartDate.safeSet(employee.getStartDate());
         }
-        if (!txtCellPhone.getText().equalsIgnoreCase(cellPhone)) {
-            txtCellPhone.set(cellPhone);
+        if (!txtCellPhone.getText().equalsIgnoreCase(employee.getCellPhone())) {
+            txtCellPhone.set(employee.getCellPhone());
         }
-        if (!txtOfficePhone.getText().equalsIgnoreCase(officePhone)) {
-            txtOfficePhone.set(officePhone);
+        if (!txtOfficePhone.getText().equalsIgnoreCase(employee.getOfficePhone())) {
+            txtOfficePhone.set(employee.getOfficePhone());
         }
-        if (!txtEmail.getText().equalsIgnoreCase(email)) {
-            txtEmail.set(email);
+        if (!txtEmail.getText().equalsIgnoreCase(employee.primaryEmail().getEmail())) {
+            txtEmail.set(employee.primaryEmail().getEmail());
         }
-        if (!txtImName.getText().equalsIgnoreCase(imName)) {
-            txtImName.set(imName);
+        if (!txtImName.getText().equalsIgnoreCase(employee.getImName())) {
+            txtImName.set(employee.getImName());
         }
-        if (!lstImClient.getFirstSelectedOption().getText().equalsIgnoreCase(imClient)) {
-            lstImClient.select(imClient);
+        if (!lstImClient.getFirstSelectedOption().getText().equalsIgnoreCase(employee.getImClient())) {
+            lstImClient.select(employee.getImClient());
         }
-        if (!lstDept.getFirstSelectedOption().getText().equalsIgnoreCase(dept)) {
-            lstDept.select(dept);
+        if (!lstDept.getFirstSelectedOption().getText().equalsIgnoreCase(employee.getDepartment())) {
+            lstDept.select(employee.getDepartment());
         }
 
         // submit
         btnSave.syncEnabled();
         btnSave.submit();
 
+        driver.page().isDomComplete();
     }
 
-    public void modifyEmployee(Employee employee) {
-        modifyEmployee(employee.getUsername(), employee.getFirstName(), employee.getLastName(), employee.getTitle(), employee.getRole(), employee.getManager(),
-                employee.getStatus(), employee.getLocation(), employee.getStartDate(), employee.getCellPhone(), employee.getOfficePhone(), employee.getEmail(),
-                employee.getImName(), employee.getImClient(), employee.getDepartment());
-    }
 }

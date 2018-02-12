@@ -7,6 +7,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.FindBy;
 
 import com.orasi.DriverManager;
+import com.orasi.DriverType;
 import com.orasi.web.AlertHandler;
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.webelements.Element;
@@ -66,8 +67,9 @@ public class ListingDepartmentsPage {
     // search page for a dept, return if displayed
     @Step("The department \"{0}\" should be found on the Titles table")
     public boolean searchTableByDept(String departmentName) {
-        if (getDepartmentElement(departmentName) != null)
+        if (getDepartmentElement(departmentName) != null) {
             return true;
+        }
         return false;
     }
 
@@ -80,7 +82,7 @@ public class ListingDepartmentsPage {
     public void deleteDepartment(String departmentName, String browser) {
         // 8/15/2016 Safari driver does not currently handle modal alerts. This is a work around to accept the alert
         // see issue in github for details: https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/3862
-        if (browser.equalsIgnoreCase("safari")) {
+        if (DriverType.SAFARI.equals(driver.getDriverType())) {
             driver.executeJavaScript("confirm = function(message){return true;};");
             driver.executeJavaScript("alert = function(message){return true;};");
             driver.executeJavaScript("prompt = function(message){return true;}");
@@ -116,11 +118,13 @@ public class ListingDepartmentsPage {
                 if (department.getText().replace("Add Subdepartment", "").trim().equals(departmentName)) {
                     departmentPosition = Integer.valueOf(department.getCssValue("margin-left").replace("px", ""));
                     if (isDirect) {
-                        if (departmentPosition - parentDepartmentPosition == positionOffset)
+                        if (departmentPosition - parentDepartmentPosition == positionOffset) {
                             isSubDepartment = true;
+                        }
                     } else {
-                        if (departmentPosition - parentDepartmentPosition >= positionOffset)
+                        if (departmentPosition - parentDepartmentPosition >= positionOffset) {
                             isSubDepartment = true;
+                        }
                     }
                 }
             } catch (NoSuchElementException nse) {
@@ -136,8 +140,9 @@ public class ListingDepartmentsPage {
         // Get all the rows in the table by CSS
         List<Element> elementList = driver.findElements(By.cssSelector(".list-group-item"));
         for (Element element : elementList) {
-            if (element.getText().replace("Add Subdepartment", "").trim().equals(departmentName))
+            if (element.getText().replace("Add Subdepartment", "").trim().equals(departmentName)) {
                 return element;
+            }
         }
         return null;
     }

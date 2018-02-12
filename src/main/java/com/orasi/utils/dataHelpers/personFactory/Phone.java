@@ -16,7 +16,7 @@ public class Phone {
     public Phone() {
         this.country = "United States";
         this.type = "Home";
-        this.number = "336" + Randomness.randomNumber(7);
+        this.number = "336785" + Randomness.randomNumber(4);
     }
 
     public boolean isPrimary() {

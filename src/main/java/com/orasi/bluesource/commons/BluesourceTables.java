@@ -7,7 +7,6 @@ import com.orasi.DriverManager;
 import com.orasi.utils.TestEnvironment;
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.webelements.Element;
-import com.orasi.web.webelements.Link;
 import com.orasi.web.webelements.Listbox;
 import com.orasi.web.webelements.Webtable;
 import com.orasi.web.webelements.impl.internal.ElementFactory;
@@ -40,20 +39,7 @@ public class BluesourceTables {
     public BluesourceTables() {
         this.driver = DriverManager.getDriver();
         ElementFactory.initElements(driver, this);
-        // driver.page().pageLoaded();
-    }
-
-    /**
-     *
-     * @param {@link
-     *            TestEnvironment} te
-     * @param {@link
-     *            Webtable} table
-     * @doc.description Webtable table passed in will be used for interactions
-     */
-    public BluesourceTables(Webtable table) {
-        this.driver = DriverManager.getDriver();
-        this.table = table;
+        driver.page().isDomComplete();
     }
 
     /**
@@ -90,11 +76,10 @@ public class BluesourceTables {
         // The link is created from its parent cell. To sort, the link needs to be clicked. Once
         // clicked, an icon in the cell will update with its current sort order
         Element cell = table.getCell(1, columnPosition);
-        Link cellLink = (Link) cell.findElement(By.xpath("a"));
-        // Link cellLink = new LinkImpl(cell.findElement(By.xpath("a")));
+        Element cellLink = cell.findElement(By.xpath("a"));
 
         cellLink.click();
-        // driver.page().pageLoaded();
+        driver.page().isDomComplete();
 
         String currentOrder = cell.findElement(By.cssSelector("span.glyphicon-sort-by-alphabet")).getAttribute("ng-show");
         if (order == SortOrder.ASCENDING) {
