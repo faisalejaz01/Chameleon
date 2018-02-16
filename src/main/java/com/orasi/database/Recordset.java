@@ -109,8 +109,8 @@ public class Recordset {
     }
 
     public String getValue(int column, int row) {
-        if (column < 0) {
-            throw new RuntimeException("Start row value needs to be 1 or greater. Start row entered was: " + column);
+        if (column <= 0) {
+            throw new RuntimeException("Start column value needs to be 1 or greater. Start column entered was: " + column);
         }
         if (row < 0) {
             throw new RuntimeException("Start row value needs to be 1 or greater. Start row entered was: " + row);

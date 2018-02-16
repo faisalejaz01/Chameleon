@@ -25,33 +25,18 @@ public abstract class Database {
     private String username = null;
     private String password = null;
     protected String connectionString = null;
-
-    protected void setDbDriver(String driver) {
-        this.driver = driver;
-    }
+    protected boolean isTypeForwardOnly = false;
 
     protected String getDbDriver() {
         return this.driver;
-    }
-
-    protected void setDbHost(String host) {
-        this.host = host;
     }
 
     protected String getDbHost() {
         return this.host;
     }
 
-    protected void setDbPort(String port) {
-        this.port = port;
-    }
-
     protected String getDbPort() {
         return this.port;
-    }
-
-    protected void setDbService(String service) {
-        this.service = service;
     }
 
     protected String getDbService() {
@@ -74,17 +59,15 @@ public abstract class Database {
         return this.password;
     }
 
-    protected void setDbConnectionString(String connection) {
-        this.connectionString = connection;
-    }
-
     protected String getDbConnectionString() {
         return connectionString;
     }
 
     public Object[][] getResultSet(String query) {
         logTrace("Entering Database#getResultSet");
-        loadDriver();
+        if (driver != null) {
+            loadDriver();
+        }
 
         logTrace("Attempt to connect to database [ " + connectionString + " ]");
         try (Connection connection = DriverManager.getConnection(connectionString, username, password);) {
@@ -94,7 +77,7 @@ public abstract class Database {
             logTrace(query);
             try (ResultSet rs = runQuery(connection, query)) {
                 logTrace("Query results returned with no errors. Parsing results");
-                Object[][] parsedRs = extract(rs);
+                Object[][] parsedRs = extract(rs, connection, query);
                 logTrace("Exiting Database#getResultSet");
                 return parsedRs;
             }
@@ -115,11 +98,12 @@ public abstract class Database {
         logTrace("Exiting Database#loadDriver");
     }
 
-    private static ResultSet runQuery(Connection connection, String query) {
+    private ResultSet runQuery(Connection connection, String query) {
         logDebug("Entering Database#runQuery");
         try {
             logDebug("Attempting to create Database Statement object from current connection");
-            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            int type = isTypeForwardOnly ? ResultSet.TYPE_FORWARD_ONLY : ResultSet.TYPE_SCROLL_INSENSITIVE;
+            Statement statement = connection.createStatement(type, ResultSet.CONCUR_READ_ONLY);
             logDebug("Successfully created Database Statement");
 
             logDebug("Attempting to execute query");
@@ -145,15 +129,25 @@ public abstract class Database {
      * @throws SQLException
      *             if an SQL exception occurs
      */
-    private static Object[][] extract(ResultSet resultSet) {
+    private Object[][] extract(ResultSet resultSet, Connection connection, String query) {
         logTrace("Entering Database#extract");
         // get row and column count
         int rowCount = 0;
         try {
             logTrace("Determining number of rows in results");
-            resultSet.last();
-            rowCount = resultSet.getRow();
-            resultSet.beforeFirst();
+            if (isTypeForwardOnly) {
+                // Database type does not support commands for moving forward and backward
+                // To determine row count, need to iterate through once, then re-query
+                // to get back to start
+                while (resultSet.next()) {
+                    rowCount++;
+                }
+                resultSet = runQuery(connection, query);
+            } else {
+                resultSet.last();
+                rowCount = resultSet.getRow();
+                resultSet.beforeFirst();
+            }
             logTrace("Rows to to be extracted [ " + rowCount + " ] ");
         } catch (Exception ex) {
             rowCount = 0;
@@ -177,16 +171,12 @@ public abstract class Database {
                     if (rowNum == 0) {
                         table[rowNum][colNum] = resultSet.getMetaData().getColumnName(rsColumn);
                     } else if (resultSet.getString(colNum + 1) == null) {
-                        // System.out.println("null");
                         table[rowNum][colNum] = "NULL";
                     } else {
                         try {
                             switch (rsmd.getColumnType(rsColumn)) {
 
                                 case Types.DATE:
-                                    table[rowNum][colNum] = String.valueOf(resultSet.getTimestamp(rsColumn));
-                                    break;
-
                                 case Types.TIMESTAMP:
                                     table[rowNum][colNum] = String.valueOf(resultSet.getTimestamp(rsColumn));
                                     break;
