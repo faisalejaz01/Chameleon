@@ -170,6 +170,27 @@ public class WebtableImpl extends ElementImpl implements Webtable {
      * Attempts to locate the number of child elements with the HTML
      * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
      * used. All rows are then iterated through as well as each column
+     * for each row until the cell with the desired text, determined by
+     * the parameter, is found.
+     *
+     * @param text
+     *            - text for which to search
+     * @param -
+     *            determines if text should match exactly or ignore case
+     * @return int - row number containing the desired text
+     */
+    @Override
+    public int getRowWithCellText(String text, boolean exact) {
+        logTrace("Entering WebtableImpl#getRowWithCellText(String text, boolean exact)");
+        int row = getRowWithCellText(text, -1, 1, exact);
+        logTrace("Exiting WebtableImpl#getRowWithCellText(String text, boolean exact)");
+        return row;
+    }
+
+    /**
+     * Attempts to locate the number of child elements with the HTML
+     * tag "tr" using xpath. If none are found, the xpath "tbody/tr" is
+     * used. All rows are then iterated through as well as each column
      * for each row until the desired cell is located. The cell text is
      * then validated against the parameter 'text'
      *
