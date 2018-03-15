@@ -42,6 +42,7 @@ public class RestResponse {
 
         logTrace("Storing orignal request for later usage");
         this.originalRequest = request;
+        this.executionTime = executionTime;
         if (request instanceof HttpEntityEnclosingRequestBase) {
             logTrace("Original request has a body entity, attempting to extract body");
             HttpEntity entity = ((HttpEntityEnclosingRequest) request).getEntity();

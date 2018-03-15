@@ -39,6 +39,11 @@ public interface Webtable extends Element {
     int getRowWithCellText(String text);
 
     /**
+     * @summary - Get Row number where text is found and case can be ignored
+     */
+    int getRowWithCellText(String text, boolean exact);
+
+    /**
      * @summary - Get Row number where text is found in a specific column
      */
     int getRowWithCellText(String text, int columnPosition);
