@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.webelements.Element;
@@ -25,6 +26,10 @@ public class WebtableImpl extends ElementImpl implements Webtable {
 
     public WebtableImpl(OrasiDriver driver, By by) {
         super(driver, by);
+    }
+
+    public WebtableImpl(OrasiDriver driver, By by, WebElement element) {
+        super(driver, by, element);
     }
 
     private List<Element> getRowCollection() {

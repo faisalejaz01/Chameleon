@@ -27,6 +27,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 import com.orasi.DriverType;
+import com.orasi.IOrasiDriver;
 import com.orasi.utils.Constants;
 import com.orasi.utils.JavaUtilities;
 import com.orasi.utils.TestReporter;
@@ -52,7 +53,7 @@ import com.orasi.web.webelements.impl.RadioGroupImpl;
 import com.orasi.web.webelements.impl.TextboxImpl;
 import com.orasi.web.webelements.impl.WebtableImpl;
 
-public class OrasiDriver implements WebDriver, TakesScreenshot {
+public class OrasiDriver implements IOrasiDriver, WebDriver, TakesScreenshot {
     private WebDriver driver;
     private DataWarehouse dataWarehouse;
     private int currentPageTimeout;
@@ -337,6 +338,7 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
      * @see http://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/web/webelements/impl/TextboxImpl.java
      */
+    @Override
     public Textbox findTextbox(By by) {
         return new TextboxImpl(this, by);
     }
@@ -351,6 +353,7 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
      * @see http://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/web/webelements/impl/TextboxImpl.java
      */
+    @Override
     public List<Textbox> findTextboxes(By by) {
         List<WebElement> elements = findWebElements(by);
         List<Textbox> textboxes = new ArrayList<>();
@@ -368,6 +371,7 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
      * @see http://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/web/webelements/impl/ButtonImpl.java
      */
+    @Override
     public Button findButton(By by) {
         return new ButtonImpl(this, by);
     }
@@ -382,6 +386,7 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
      * @see http://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/web/webelements/impl/ButtonImpl.java
      */
+    @Override
     public List<Button> findButtons(By by) {
         List<WebElement> elements = findWebElements(by);
         List<Button> buttons = new ArrayList<>();
@@ -399,10 +404,12 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
      * @see http://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/web/webelements/impl/CheckboxImpl.java
      */
+    @Override
     public Checkbox findCheckbox(By by) {
         return new CheckboxImpl(this, by);
     }
 
+    @Override
     public List<Checkbox> findCheckboxes(By by) {
         List<WebElement> elements = findWebElements(by);
         List<Checkbox> checkboxes = new ArrayList<>();
@@ -420,10 +427,12 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
      * @see http://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/web/webelements/impl/LabelImpl.java
      */
+    @Override
     public Label findLabel(By by) {
         return new LabelImpl(this, by);
     }
 
+    @Override
     public List<Label> findLabels(By by) {
         List<WebElement> elements = findWebElements(by);
         List<Label> labels = new ArrayList<>();
@@ -462,8 +471,17 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
      * @see http://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/web/webelements/impl/ListboxImpl.java
      */
+    @Override
     public Listbox findListbox(By by) {
         return new ListboxImpl(this, by);
+    }
+
+    @Override
+    public List<Listbox> findListboxes(By by) {
+        List<WebElement> elements = findWebElements(by);
+        List<Listbox> links = new ArrayList<>();
+        elements.forEach(element -> links.add(new ListboxImpl(this, by, element)));
+        return links;
     }
 
     /**
@@ -476,6 +494,7 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
      * @see http://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/web/webelements/impl/RadioGroupImpl.java
      */
+    @Override
     public RadioGroup findRadioGroup(By by) {
         return new RadioGroupImpl(this, by);
     }
@@ -490,8 +509,17 @@ public class OrasiDriver implements WebDriver, TakesScreenshot {
      * @see http://selenium.googlecode.com/git/docs/api/java/org/openqa/selenium/WebDriver.html#findElement-org.openqa.selenium.By-
      * @see http://github.com/Orasi/Chameleon/blob/master/src/main/java/com/orasi/web/webelements/impl/WebtableImpl.java
      */
+    @Override
     public Webtable findWebtable(By by) {
         return new WebtableImpl(this, by);
+    }
+
+    @Override
+    public List<Webtable> findWebtables(By by) {
+        List<WebElement> elements = findWebElements(by);
+        List<Webtable> links = new ArrayList<>();
+        elements.forEach(element -> links.add(new WebtableImpl(this, by, element)));
+        return links;
     }
 
     /**

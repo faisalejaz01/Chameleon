@@ -65,6 +65,11 @@
 		</repository>
 	</distributionManagement>
 	<dependencies>
+		 <dependency>
+            <groupId>io.appium</groupId>
+            <artifactId>java-client</artifactId>
+            <version>6.0.0-BETA4</version>
+        </dependency>
 		<!-- Start Selenium requirements -->
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
@@ -184,6 +189,7 @@
 		</dependency>
 
 		<!-- End REST Core requirements -->
+		
 	</dependencies>
 
 	<build>

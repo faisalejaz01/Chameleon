@@ -4,7 +4,6 @@ import static com.orasi.utils.TestReporter.logTrace;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.security.Credentials;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -57,16 +56,16 @@ public class AlertHandler {
         logTrace("Exiting AlertHandler#handleAlert(driver, timeout, inputText)");
     }
 
-    public static void handleAlert(WebDriver driver, int timeout, Credentials credentials) {
-        logTrace("Entering AlertHandler#handleAlert(driver, timeout, credentials)");
-        if (isAlertPresent(driver, timeout)) {
-            logTrace("Alert was found, handling Alert");
-            alertHandler(driver, credentials);
-        } else {
-            logTrace("No Alert was found, nothing to handle");
-        }
-        logTrace("Exiting AlertHandler#handleAlert(driver, timeout, credentials)");
-    }
+    // public static void handleAlert(WebDriver driver, int timeout, Credentials credentials) {
+    // logTrace("Entering AlertHandler#handleAlert(driver, timeout, credentials)");
+    // if (isAlertPresent(driver, timeout)) {
+    // logTrace("Alert was found, handling Alert");
+    // alertHandler(driver, credentials);
+    // } else {
+    // logTrace("No Alert was found, nothing to handle");
+    // }
+    // logTrace("Exiting AlertHandler#handleAlert(driver, timeout, credentials)");
+    // }
 
     private static void alertHandler(WebDriver driver) {
         logTrace("Entering AlertHandler#alertHandler(driver)");
@@ -91,14 +90,14 @@ public class AlertHandler {
         logTrace("Exiting AlertHandler#alertHandler(driver, inputText)");
     }
 
-    private static void alertHandler(WebDriver driver, Credentials credentials) {
-        logTrace("Entering AlertHandler#alertHandler(driver, credentials)");
-        try {
-            Alert alert = driver.switchTo().alert();
-            logTrace("Closing alert popup with text [ " + alert.getText() + " ] with authentication user");
-            alert.authenticateUsing(credentials);
-        } catch (Exception throwAway) {
-        }
-        logTrace("Exiting AlertHandler#alertHandler(driver, credentials)");
-    }
+    // private static void alertHandler(WebDriver driver, Credentials credentials) {
+    // logTrace("Entering AlertHandler#alertHandler(driver, credentials)");
+    // try {
+    // Alert alert = driver.switchTo().alert();
+    // logTrace("Closing alert popup with text [ " + alert.getText() + " ] with authentication user");
+    // alert.authenticateUsing(credentials);
+    // } catch (Exception throwAway) {
+    // }
+    // logTrace("Exiting AlertHandler#alertHandler(driver, credentials)");
+    // }
 }

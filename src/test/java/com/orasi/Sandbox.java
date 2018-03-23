@@ -1,38 +1,57 @@
 package com.orasi;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.FindBy;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.orasi.database.Database;
-import com.orasi.database.Recordset;
-import com.orasi.database.databaseImpl.MariaDBDatabase;
-import com.orasi.database.databaseImpl.SQLiteDatabase;
+import com.orasi.ui.by.FindByWindows;
 import com.orasi.utils.TestReporter;
-import com.orasi.utils.io.FileLoader;
+import com.orasi.web.OrasiDriver;
+import com.orasi.web.webelements.Button;
+import com.orasi.web.webelements.Textbox;
+import com.orasi.web.webelements.impl.internal.ElementFactory;
 
 public class Sandbox {
+    @FindBy(name = "Plus")
+    public Button plus;
+
+    @FindByWindows(accessibilityId = "equalButton")
+    public Button equals;
+
+    @FindByWindows(accessibilityId = "CalculatorResults")
+    public Textbox results;
+
+    public By two = By.name("Two");
+
+    @BeforeMethod
+    public void setup() {
+        TestReporter.setDebugLevel(1);
+        DriverOptionsManager options = new DriverOptionsManager();
+        options.setCapability(DriverType.WINDOWS, "app", "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App");
+        DriverManagerFactory.getManager(DriverType.WINDOWS, options).initalizeDriver();
+    }
+
+    @AfterMethod
+    public void teardown() {
+        DriverManager.quitDriver();
+    }
 
     @Test
-    public void getAllSelectedOptions() {
-        TestReporter.setDebugLevel(3);
+    public void simpleCalculator() {
+        OrasiDriver driver = DriverManager.getDriver();
+        ElementFactory.initElements(driver, this);
 
-        Database sqlLiteDb = new SQLiteDatabase(FileLoader.getAbsolutePathForResource("db/SampleDB.db"));
-        Recordset rsSqlLite = new Recordset(sqlLiteDb.getResultSet("SELECT * FROM Customers"));
-        rsSqlLite.print();
-        for (rsSqlLite.moveFirst(); rsSqlLite.hasNext(); rsSqlLite.moveNext()) {
-            System.out.println(rsSqlLite.getValue("CustomerID") + "\t" +
-                    rsSqlLite.getValue("CompanyName") + "\t" +
-                    rsSqlLite.getValue("ContactName") + "\t" +
-                    rsSqlLite.getValue("ContactTitle") + "\t" +
-                    rsSqlLite.getValue("Address") + "\t" +
-                    rsSqlLite.getValue("City") + "\t" +
-                    rsSqlLite.getValue("State") + "\t");
-        }
+        Button one = driver.findButton(By.name("One"));
+        one.syncVisible();
+        one.click();
+        plus.click();
+        driver.findButton(two).click();
+        equals.click();
 
-        Database mariaDb = new MariaDBDatabase("localhost", "4001", "Mysql");
-        mariaDb.setDbUserName("root");
-        mariaDb.setDbPassword("toor");
-        // Recordset rsMaria = new Recordset(mariaDb.getResultSet("SELECT * FROM EQUIPMENT"));
-        // rsMaria.print();
-        // mariaDb.getResultSetAsDataProvider("SELECT * FROM EQUIPMENT");
+        TestReporter.assertTrue("3".equals(results.getText().replace("Display is", "").trim()), "Validate Calculator results is 3 as expected");
+        results.syncTextInElement("3"); // redundant but testing other syncs
+        TestReporter.logScreenshot(driver.getWebDriver(), "WinAppTest");
     }
 }

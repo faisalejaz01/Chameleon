@@ -7,6 +7,7 @@ import static com.orasi.utils.TestReporter.logTrace;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import com.orasi.IOrasiDriver;
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebException;
 import com.orasi.web.webelements.Button;

@@ -9,6 +9,8 @@ import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.safari.SafariOptions;
 
+import com.orasi.ui.driverManager.WindowsOptions;
+
 public class DriverOptionsManager {
     private ChromeOptions chromeOptions = null;
     private EdgeOptions edgeOptions = null;
@@ -16,6 +18,7 @@ public class DriverOptionsManager {
     private FirefoxProfile firefoxProfile = null;
     private InternetExplorerOptions internetExplorerOptions = null;
     private SafariOptions safariOptions = null;
+    private WindowsOptions windowsOptions = null;
 
     public DriverOptionsManager() {
         chromeOptions = new ChromeOptions();
@@ -23,6 +26,7 @@ public class DriverOptionsManager {
         firefoxOptions = new FirefoxOptions();
         internetExplorerOptions = new InternetExplorerOptions();
         safariOptions = new SafariOptions();
+        windowsOptions = new WindowsOptions();
     }
 
     public ChromeOptions getChromeOptions() {
@@ -43,6 +47,10 @@ public class DriverOptionsManager {
 
     public SafariOptions getSafariOptions() {
         return safariOptions;
+    }
+
+    public WindowsOptions getWindowsOptions() {
+        return windowsOptions;
     }
 
     public void setBrowserVersion(DriverType driverType, String version) {
@@ -73,6 +81,10 @@ public class DriverOptionsManager {
 
             case SAFARI:
                 safariOptions.setCapability(capabilityName, capabilityValue);
+                break;
+
+            case WINDOWS:
+                windowsOptions.setCapability(capabilityName, capabilityValue);
                 break;
 
             default:

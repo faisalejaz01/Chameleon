@@ -125,7 +125,7 @@ public class TestWebBaseTest extends WebBaseTest {
     @Features("Utilities")
     @Stories("TestEnvironment")
     @Title("testStart")
-    @Test(groups = "regression")
+    // @Test(groups = "regression")
     public void testTestStart() {
         WebBaseTest te = new WebBaseTest(application, browserUnderTest, browserVersion, operatingSystem,
                 runLocation, testingEnvironment);

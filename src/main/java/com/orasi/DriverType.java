@@ -9,6 +9,7 @@ public enum DriverType {
     ANDROID("android"),
     IOS("ios"),
     APPIUM("appium"),
+    WINDOWS("windows"),
     HTML("html");
 
     private final String[] driverType;

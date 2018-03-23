@@ -39,6 +39,10 @@ public class ListboxImpl extends ElementImpl implements Listbox {
         logTrace("Exiting ListboxImpl#init");
     }
 
+    public ListboxImpl(OrasiDriver driver, By by, WebElement element) {
+        super(driver, by, element);
+    }
+
     /**
      * @summary - Wraps Selenium's method.
      * @param text

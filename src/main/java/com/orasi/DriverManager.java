@@ -90,8 +90,12 @@ public abstract class DriverManager {
         OrasiDriver driver = new OrasiDriver();
         driver.setDriver(this.driver);
         driver.setElementTimeout(Constants.ELEMENT_TIMEOUT);
-        driver.setPageTimeout(Constants.PAGE_TIMEOUT);
-        driver.setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+
+        if (!DriverType.WINDOWS.equals(getDriverType())) {
+            driver.setPageTimeout(Constants.PAGE_TIMEOUT);
+            driver.setScriptTimeout(Constants.DEFAULT_GLOBAL_DRIVER_TIMEOUT);
+        }
+
         driver.setDriverType(getDriverType());
         orasiDriver.set(driver);
     }

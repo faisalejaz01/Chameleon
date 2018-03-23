@@ -9,6 +9,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import com.orasi.DriverType;
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.webelements.Textbox;
 
@@ -250,7 +251,12 @@ public class TextboxImpl extends ElementImpl implements Textbox {
     @Override
     public String getText() {
         logTrace("Entering TextboxImpl#getText");
-        String text = getWrappedElement().getAttribute("value");
+        String text;
+        if (DriverType.WINDOWS.equals(driver.getDriverType())) {
+            text = getWrappedElement().getText();
+        } else {
+            text = getWrappedElement().getAttribute("value");
+        }
         logTrace("Exiting TextboxImpl#getText");
         return text;
     }

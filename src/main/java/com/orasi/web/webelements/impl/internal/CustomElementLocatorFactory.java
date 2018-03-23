@@ -8,6 +8,8 @@ import org.openqa.selenium.support.pagefactory.DefaultElementLocator;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
 
+import com.orasi.ui.by.FindByWindows;
+import com.orasi.ui.by.WindowsElementLocator;
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.by.angular.AngularElementLocator;
 import com.orasi.web.by.angular.FindByNG;
@@ -38,6 +40,12 @@ public class CustomElementLocatorFactory implements ElementLocatorFactory {
             logTrace("Attempting to create Common Element Locator");
             CommonElementLocator element = new CommonElementLocator(driver, field);
             logTrace("Successfully created Common Element Locator");
+            logTrace("Exiting CustomElementLocatorFactory#createLocator");
+            return element;
+        } else if (field.isAnnotationPresent(FindByWindows.class)) {
+            logTrace("Attempting to create Windows Element Locator");
+            WindowsElementLocator element = new WindowsElementLocator(driver, field);
+            logTrace("Successfully created WindowsElement Locator");
             logTrace("Exiting CustomElementLocatorFactory#createLocator");
             return element;
         } else {

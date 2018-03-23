@@ -1,5 +1,6 @@
 package com.orasi;
 
+import com.orasi.ui.driverManager.WindowsDriverManager;
 import com.orasi.web.driverManager.ChromeDriverManager;
 import com.orasi.web.driverManager.EdgeDriverManager;
 import com.orasi.web.driverManager.FirefoxDriverManager;
@@ -26,6 +27,9 @@ public class DriverManagerFactory {
             case INTERNETEXPLORER:
                 driverManager = new InternetExplorerDriverManager();
                 break;
+            case WINDOWS:
+                driverManager = new WindowsDriverManager();
+                break;
             default:
                 driverManager = new SafariDriverManager();
                 break;
@@ -51,6 +55,9 @@ public class DriverManagerFactory {
                 break;
             case INTERNETEXPLORER:
                 driverManager = new InternetExplorerDriverManager(options.getInternetExplorerOptions());
+                break;
+            case WINDOWS:
+                driverManager = new WindowsDriverManager(options.getWindowsOptions());
                 break;
             default:
                 driverManager = new SafariDriverManager(options.getSafariOptions());
