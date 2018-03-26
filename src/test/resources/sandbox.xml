@@ -9,7 +9,7 @@
  
 	<test name="Testbox Test" parallel="methods" thread-count="10">
 		<classes>
-			<class name="com.orasi.web.TestOrasiDriver" />
+			<class name="com.orasi.web.webelements.TestElementInternalHandlers" />
 		</classes>
 	</test>
 	
