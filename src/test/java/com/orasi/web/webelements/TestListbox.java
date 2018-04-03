@@ -1,6 +1,7 @@
 package com.orasi.web.webelements;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import org.testng.ITestContext;
@@ -14,7 +15,6 @@ import com.orasi.DriverManager;
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebBaseTest;
 import com.orasi.web.exceptions.OptionNotInListboxException;
-import com.orasi.web.exceptions.SelectElementNotFoundException;
 import com.orasi.web.webelements.impl.ListboxImpl;
 import com.orasi.web.webelements.impl.internal.ElementFactory;
 
@@ -180,7 +180,7 @@ public class TestListbox extends WebBaseTest {
     @Features("Element Interfaces")
     @Stories("Listbox")
     @Title("select via page factory negative scenario")
-    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "deselectByVisibleText", expectedExceptions = SelectElementNotFoundException.class)
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "deselectByVisibleText", expectedExceptions = NoSuchElementException.class)
     public void negativePageFactoryTest() {
         ElementFactory.initElements(driver, this);
         badSelect.select("Sports");

@@ -2,8 +2,6 @@ package com.orasi.web.webelements;
 
 import java.util.List;
 
-import org.openqa.selenium.WebElement;
-
 import com.orasi.web.webelements.impl.ListboxImpl;
 import com.orasi.web.webelements.impl.internal.ImplementedBy;
 
@@ -47,21 +45,23 @@ public interface Listbox extends Element {
      * @return WebElement
      * @see org.openqa.selenium.support.ui.Select#getFirstSelectedOption()
      */
-    WebElement getFirstSelectedOption();
+    Element getFirstSelectedOption();
 
     /**
      * @author Justin
      * @return WebElement list of all options in a given listbox
      * @see org.openqa.selenium.WebElement#isSelected()
      */
-    List<WebElement> getOptions();
+    List<Element> getOptions();
+
+    List<String> getOptionValues();
 
     /**
      * @author Justin
      * @return WebElement list of all selected options in a given listbox
      * @see org.openqa.selenium.WebElement#isSelected()
      */
-    List<WebElement> getAllSelectedOptions();
+    List<Element> getAllSelectedOptions();
 
     /**
      * @author Justin
