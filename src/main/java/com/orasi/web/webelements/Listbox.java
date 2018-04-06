@@ -10,65 +10,86 @@ import com.orasi.web.webelements.impl.internal.ImplementedBy;
  */
 @ImplementedBy(ListboxImpl.class)
 public interface Listbox extends Element {
-    /**
-     * @summary - Wraps Selenium's method.
-     * @param value
-     *            - the value/option to select.
-     * @see org.openqa.selenium.support.ui.Select#selectByVisibleText(String)
-     */
-    void select(String value);
 
     /**
-     * @summary - Wraps Selenium's method.
-     * @param value
-     *            - the value/option to select.
-     * @see org.openqa.selenium.support.ui.Select#selectByValue(String)
-     */
-    void selectValue(String value);
-
-    /**
-     * @summary - Wraps Selenium's method.
-     * @see org.openqa.selenium.support.ui.Select#deselectAll()
+     * @summary - Deselect all selection options only if multi-select Listbox
      */
     void deselectAll();
 
     /**
-     * @summary - Wraps Selenium's method.
+     * @summary - Click option with text
      * @param text
-     *            - text to deselect by visible text
-     * @see org.openqa.selenium.support.ui.Select#deselectByVisibleText(String)
+     *            - visible text to select
      */
     void deselectByVisibleText(String text);
 
     /**
-     * @author Justin
-     * @return WebElement
-     * @see org.openqa.selenium.support.ui.Select#getFirstSelectedOption()
+     * @summary - return first option that is select in list
+     * @return first option that is select in list
      */
     Element getFirstSelectedOption();
 
     /**
-     * @author Justin
-     * @return WebElement list of all options in a given listbox
-     * @see org.openqa.selenium.WebElement#isSelected()
+     * @summary - return list of all options in the select
+     * @return list of all options in the select.
      */
     List<Element> getOptions();
 
+    /**
+     * @summary - list of all option values in the select.
+     * @return list of all option values in the select.
+     */
     List<String> getOptionValues();
 
     /**
-     * @author Justin
-     * @return WebElement list of all selected options in a given listbox
-     * @see org.openqa.selenium.WebElement#isSelected()
+     * @summary - Wraps Selenium's method.
+     * @return list of all option values in the select.
+     */
+    List<String> getOptionTextValues();
+
+    /**
+     * @summary - returns list of all selected options in a given listbox
+     * @return list of all selected options in a given listbox
      */
     List<Element> getAllSelectedOptions();
 
     /**
-     * @author Justin
-     * @return {@link boolean} TRUE if element is currently select
+     * @summary - Checks Listbox for multiple attribute
+     * @return boolean based on if multiple attribute is found
+     */
+    boolean isMultiple();
+
+    /**
+     * @return TRUE if element is currently selected using Selenium isSelected
      * @see org.openqa.selenium.WebElement#isSelected()
      */
     boolean isSelected(String option);
 
-    boolean isMultiple();
+    /**
+     * @param tag
+     *            - xpath tag of element that code should search for option text or value attribute
+     * @summary - Define the tag where code should search for option text or value attribute
+     */
+    public void overrideOptionTag(String tag);
+
+    /**
+     * @param tag
+     *            - xpath tag of element that code should click for found options
+     * @summary - Define the tag where code should click for found options
+     */
+    public void overrideClickableTag(String tag);
+
+    /**
+     * @summary - Click option with text
+     * @param text
+     *            - visible text to select
+     */
+    void select(String value);
+
+    /**
+     * @summary - Click option with attribute with specific value
+     * @param text
+     *            - value option to select
+     */
+    void selectValue(String value);
 }

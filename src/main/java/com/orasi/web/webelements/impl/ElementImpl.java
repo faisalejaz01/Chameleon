@@ -215,6 +215,7 @@ public class ElementImpl implements Element {
     /**
      * @see org.openqa.selenium.WebElement#getText()
      */
+
     @Override
     public String getText() {
         logTrace("Entering ElementImpl#getText");

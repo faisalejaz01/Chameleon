@@ -1,5 +1,7 @@
 package com.orasi.web.webelements;
 
+import java.util.stream.Collectors;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.FindBy;
@@ -14,6 +16,7 @@ import org.testng.annotations.Test;
 import com.orasi.DriverManager;
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.WebBaseTest;
+import com.orasi.web.WebException;
 import com.orasi.web.exceptions.OptionNotInListboxException;
 import com.orasi.web.webelements.impl.ListboxImpl;
 import com.orasi.web.webelements.impl.internal.ElementFactory;
@@ -74,6 +77,26 @@ public class TestListbox extends WebBaseTest {
         Listbox listbox = driver.findListbox(By.id("singleSelect"));
         listbox.select("Sports");
         Assert.assertTrue(listbox.getFirstSelectedOption().getText().equals("Sports"));
+    }
+
+    @Features("Element Interfaces")
+    @Stories("Listbox")
+    @Title("selectFromMultiple")
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "constructorWithElement")
+    public void selectFromMultiple() {
+        Listbox listbox = driver.findListbox(By.id("multiSelectFalse"));
+        listbox.select("Tennis");
+        Assert.assertTrue(listbox.getFirstSelectedOption().getText().equals("Tennis"));
+    }
+
+    @Features("Element Interfaces")
+    @Stories("Listbox")
+    @Title("selectValueFromMultiple")
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "selectFromMultiple")
+    public void selectValueFromMultiple() {
+        Listbox listbox = driver.findListbox(By.id("multiSelectFalse"));
+        listbox.selectValue("Badminton");
+        Assert.assertTrue(listbox.getFirstSelectedOption().getText().equals("Badminton"));
     }
 
     @Features("Element Interfaces")
@@ -167,6 +190,15 @@ public class TestListbox extends WebBaseTest {
 
     @Features("Element Interfaces")
     @Stories("Listbox")
+    @Title("deselectByVisibleTextNonMulti")
+    @Test(groups = { "regression", "interfaces", "listbox" }, dependsOnMethods = "constructorWithElement", expectedExceptions = WebException.class)
+    public void deselectByVisibleTextNonMulti() {
+        Listbox listbox = driver.findListbox(By.id("singleSelect"));
+        listbox.deselectByVisibleText("Soccer");
+    }
+
+    @Features("Element Interfaces")
+    @Stories("Listbox")
     @Title("deselectAll")
     @Test(groups = { "regression", "interfaces", "listbox" }, dependsOnMethods = "deselectByVisibleText")
     public void deselectAll() {
@@ -175,6 +207,15 @@ public class TestListbox extends WebBaseTest {
         listbox.select("Soccer");
         listbox.deselectAll();
         Assert.assertNull(listbox.getFirstSelectedOption());
+    }
+
+    @Features("Element Interfaces")
+    @Stories("Listbox")
+    @Title("deselectAllNonMulti")
+    @Test(groups = { "regression", "interfaces", "listbox" }, dependsOnMethods = "constructorWithElement", expectedExceptions = WebException.class)
+    public void deselectAllNonMulti() {
+        Listbox listbox = driver.findListbox(By.id("singleSelect"));
+        listbox.deselectAll();
     }
 
     @Features("Element Interfaces")
@@ -194,6 +235,96 @@ public class TestListbox extends WebBaseTest {
         ElementFactory.initElements(driver, this);
         listbox.select("Sports");
         Assert.assertTrue(listbox.getFirstSelectedOption().getText().equals("Sports"));
+    }
+
+    @Features("Element Interfaces")
+    @Stories("Listbox")
+    @Title("Unordered List")
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "pageFactoryTest")
+    public void unorderedList() {
+        Button listButton = driver.findButton(By.id("menu1"));
+        listButton.click();
+
+        Listbox listbox = driver.findListbox(By.className("dropdown-menu"));
+        listbox.syncVisible();
+        listbox.select("HTML");
+        Assert.assertTrue(listButton.getText().equals("HTML"));
+    }
+
+    @Features("Element Interfaces")
+    @Stories("Listbox")
+    @Title("Override Option Tag")
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "unorderedList")
+    public void overrideOptionTag() {
+        Button listButton = driver.findButton(By.id("menu1"));
+        listButton.click();
+
+        Listbox listbox = driver.findListbox(By.className("dropdown-menu"));
+        listbox.syncVisible();
+        listbox.overrideOptionTag("a");
+        listbox.select("Mercury");
+        Assert.assertTrue(listButton.getText().equals("Mercury"));
+    }
+
+    @Features("Element Interfaces")
+    @Stories("Listbox")
+    @Title("Override Option Tag")
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "overrideOptionTag")
+    public void overrideClickableTag() {
+        Button listButton = driver.findButton(By.id("menu1"));
+        listButton.click();
+
+        Listbox listbox = driver.findListbox(By.className("dropdown-menu"));
+        listbox.syncVisible();
+        listbox.overrideClickableTag("a");
+        listbox.select("Jupiter");
+        Assert.assertTrue(listButton.getText().equals("Jupiter"));
+    }
+
+    @Features("Element Interfaces")
+    @Stories("Listbox")
+    @Title("Override Option TagNull")
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "constructorWithElement", expectedExceptions = WebException.class)
+    public void overrideOptionTagNull() {
+        Listbox listbox = driver.findListbox(By.className("dropdown-menu"));
+        listbox.overrideOptionTag("");
+    }
+
+    @Features("Element Interfaces")
+    @Stories("Listbox")
+    @Title("Override Option Tag Null")
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "constructorWithElement", expectedExceptions = WebException.class)
+    public void overrideClickableTagNull() {
+        Listbox listbox = driver.findListbox(By.className("dropdown-menu"));
+        listbox.overrideClickableTag("");
+    }
+
+    @Features("Element Interfaces")
+    @Stories("Listbox")
+    @Title("getOptionValues")
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "constructorWithElement")
+    public void getOptionValues() {
+        String options = driver.findListbox(By.id("singleSelect")).getOptionValues().stream().collect(Collectors.joining(" "));
+        Assert.assertTrue(options.contains("Other"));
+        Assert.assertTrue(options.contains("Music"));
+        Assert.assertTrue(options.contains("Movie"));
+        Assert.assertTrue(options.contains("Science"));
+        Assert.assertTrue(options.contains("Sports"));
+        Assert.assertTrue(options.contains("Politics"));
+    }
+
+    @Features("Element Interfaces")
+    @Stories("Listbox")
+    @Title("getOptionTextValues")
+    @Test(groups = { "regression", "interfaces", "listbox", "mustard" }, dependsOnMethods = "constructorWithElement")
+    public void getOptionTextValues() {
+        String options = driver.findListbox(By.id("singleSelect")).getOptionTextValues().stream().collect(Collectors.joining(" "));
+        Assert.assertTrue(options.contains("Other"));
+        Assert.assertTrue(options.contains("Music"));
+        Assert.assertTrue(options.contains("Movie"));
+        Assert.assertTrue(options.contains("Science"));
+        Assert.assertTrue(options.contains("Sports"));
+        Assert.assertTrue(options.contains("Politics"));
     }
 
 }
