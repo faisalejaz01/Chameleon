@@ -5,8 +5,8 @@ import static com.orasi.utils.Constants.MAX_SLEEP_TIME;
 
 public class Sleeper {
     public static void sleep(double seconds) {
-    	if (seconds>MAX_SLEEP_TIME) {
-    		throw new RuntimeException("Sleep time exceeds 600 seconds.");
+    	if (seconds>=MAX_SLEEP_TIME) {
+    		throw new AutomationException("Sleep time exceeds "+MAX_SLEEP_TIME+" seconds.");
     	}
         TestReporter.logTrace("Sleeping for [ " + seconds + " ] seconds");
         StopWatch stopwatch = new StopWatch();
