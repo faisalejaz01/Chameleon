@@ -1,6 +1,6 @@
 # Version History
 ## Version 1.1.5 - 02/14/2018
-* **New Utilities**
+* **New Utilities **
   * PageLoaded.isJQueryComplete
     * Will check page is see if jQuery is valid on page before checking all jQuery sessions are complete
 * **General**   
