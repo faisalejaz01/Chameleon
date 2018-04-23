@@ -498,6 +498,6 @@ public class TestSoapService extends APIBaseTest {
     }
 
     private void sleep() {
-        Sleeper.sleep(1000);
+        Sleeper.sleep(1.0);
     }
 }
