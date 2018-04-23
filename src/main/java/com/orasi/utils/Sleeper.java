@@ -2,6 +2,7 @@ package com.orasi.utils;
 
 import org.apache.commons.lang3.time.StopWatch;
 import static com.orasi.utils.Constants.MAX_SLEEP_TIME;
+import com.orasi.AutomationException;
 
 public class Sleeper {
     public static void sleep(double seconds) {
