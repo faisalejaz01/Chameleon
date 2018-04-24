@@ -1,5 +1,5 @@
 
-package com.orasi.api.restServices.salesforce;
+package com.salesforce.api.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 

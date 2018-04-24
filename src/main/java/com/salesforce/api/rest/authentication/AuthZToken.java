@@ -1,4 +1,4 @@
-package com.orasi.api.restServices.salesforce.authz;
+package com.salesforce.api.rest.authentication;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
