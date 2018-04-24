@@ -21,9 +21,11 @@ import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -802,15 +804,17 @@ public class ElementImpl implements Element {
         }
         do {
             try {
-                if (wait.until(ExpectedConditions.textToBePresentInElement(reload(), text)) != null) {
+                ExpectedCondition<Boolean> textFinder = (WebDriver wd) -> (element.getText().contains(text)
+                        || (element.getAttribute("value") != null && element.getAttribute("value").contains(text))
+                        || ((String) driver.executeJavaScript("return arguments[0].textContent.trim()", reload())).contains(text));
+                if (wait.until(textFinder) != null) {
                     found = true;
-                } else if (wait.until(ExpectedConditions.textToBePresentInElementValue(reload(), text)) != null) {
-                    found = true;
-                }
-                if (found) {
-                    break;
                 }
             } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te) {
+            }
+
+            if (found) {
+                break;
             }
         } while (stopwatch.getTime() / 1000.0 < requestedTimeout);
 
@@ -889,20 +893,14 @@ public class ElementImpl implements Element {
         WebDriverWait wait = new WebDriverWait(driver, 0);
 
         do {
-
             try {
-                if (Highlight.getDebugMode()) {
-                    Highlight.highlightDebug(driver, reload());
-                }
-                if (wait.until(ExtendedExpectedConditions.textToMatchInElement(reload(), regex)) != null) {
-                    found = true;
-                } else if (wait.until(ExtendedExpectedConditions.textToMatchInElementAttribute(reload(), "value", regex)) != null) {
+                ExpectedCondition<Boolean> textFinder = (WebDriver wd) -> (element.getText().contains(regex)
+                        || (element.getAttribute("value") != null && element.getAttribute("value").contains(regex))
+                        || ((String) driver.executeJavaScript("return arguments[0].textContent.trim()", reload())).contains(regex));
+                if (wait.until(textFinder) != null) {
                     found = true;
                 }
-                if (found) {
-                    break;
-                }
-            } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException e) {
+            } catch (NoSuchElementException | ClassCastException | StaleElementReferenceException | TimeoutException te) {
             }
         } while (stopwatch.getTime() / 1000.0 < requestedTimeout);
 
