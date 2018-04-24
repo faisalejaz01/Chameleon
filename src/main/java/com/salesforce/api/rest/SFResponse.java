@@ -1,4 +1,4 @@
-package com.salesforce.api.rest.authentication;
+package com.salesforce.api.rest;
 
 import java.util.List;
 
