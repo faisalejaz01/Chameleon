@@ -2,17 +2,17 @@ package com.salesforce;
 
 import org.openqa.selenium.By;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.orasi.DriverManager;
 import com.orasi.DriverManagerFactory;
 import com.orasi.DriverType;
 import com.orasi.web.OrasiDriver;
+import com.salesforce.api.domain.Account;
 import com.salesforce.api.rest.manager.SalesforceObjectManager;
 
 public class Sandbox {
-    SalesforceObjectManager salesforce = new SalesforceObjectManager();
     By txtUser = By.id("username");
     By txtPass = By.id("password");
     By btnLogin = By.id("Login");
@@ -20,18 +20,25 @@ public class Sandbox {
     By lblError = By.id("errorTitle");
     By lblName = By.className("topName");
 
-    @BeforeSuite
-    public void setup() {
-        salesforce.accounts().createDefaultAccount();
+    @DataProvider(parallel = true)
+    public Object[][] dp() {
+        return new Object[][] { { "account1" }, { "account2" } };
     }
 
-    @Test
-    public void test() {
+    @Test(dataProvider = "dp")
+    public void test(String name) {
+        Account account = new Account();
+        account.setName(name);
+        account.setDescription("This account was created via REST automation");
+        account.setPhone("3363363366");
+
+        SalesforceObjectManager.getInstance().accounts().createAccount(account);
+
         DriverManagerFactory.getManager(DriverType.CHROME).initalizeDriver();
         OrasiDriver driver = DriverManager.getDriver();
         driver.debug().setHighlightOnSync(true);
 
-        driver.get("https://na59.salesforce.com/" + salesforce.accounts().getAccount().getId());
+        driver.get("https://na59.salesforce.com/" + SalesforceObjectManager.getInstance().accounts().getAccount().getId());
         driver.findTextbox(txtUser).syncEnabled();
         driver.findTextbox(txtUser).set("justin.phlegar@orasi.com");
         driver.findTextbox(txtPass).set("roottoor85");
@@ -39,9 +46,9 @@ public class Sandbox {
 
         driver.page().isDomComplete();
         driver.findWebtable(By.id("bodyTable")).syncVisible();
-        driver.findLabel(lblName).syncTextInElement(salesforce.accounts().getAccount().getName(), 15);
+        driver.findLabel(lblName).syncTextInElement(SalesforceObjectManager.getInstance().accounts().getAccount().getName(), 15);
 
-        salesforce.accounts().deleteAccount(salesforce.accounts().getAccount());
+        SalesforceObjectManager.getInstance().accounts().deleteAccount(SalesforceObjectManager.getInstance().accounts().getAccount());
         driver.navigate().refresh();
 
         driver.findLabel(lblError).syncTextInElement("Record deleted", 15);
@@ -50,7 +57,7 @@ public class Sandbox {
 
     @AfterMethod
     public void cleanup() {
-        salesforce.accounts().deleteAllAccounts();
+        SalesforceObjectManager.getInstance().accounts().deleteAllAccounts();
         DriverManager.quitDriver();
     }
 }

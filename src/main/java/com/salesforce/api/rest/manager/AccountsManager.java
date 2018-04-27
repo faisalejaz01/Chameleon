@@ -12,29 +12,24 @@ public class AccountsManager {
     private AccountProcessor processor = new AccountProcessor();
     private List<Account> accounts = new ArrayList<>();
 
-    private static AccountsManager INSTANCE;
-
-    public static synchronized AccountsManager getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new AccountsManager();
-        }
-        return INSTANCE;
+    public Account createDefaultAccount() {
+        return createDefaultAccount("REST API Test");
     }
 
-    public void createDefaultAccount() {
-        createDefaultAccount("REST API Test");
-    }
-
-    public void createDefaultAccount(String name) {
+    public Account createDefaultAccount(String name) {
         Account account = new Account();
         account.setName(name);
         account.setDescription("This account was created via REST automation");
         account.setPhone("3363363366");
-        accounts.add(create(account));
+        Account newAccount = create(account);
+        accounts.add(newAccount);
+        return newAccount;
     }
 
-    public void createAccount(Account account) {
-        accounts.add(create(account));
+    public Account createAccount(Account account) {
+        Account newAccount = create(account);
+        accounts.add(newAccount);
+        return newAccount;
     }
 
     public Account getAccount() {
