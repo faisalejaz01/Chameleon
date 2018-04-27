@@ -6,16 +6,11 @@ import com.orasi.api.restServices.RestResponse;
 import com.orasi.api.restServices.RestService;
 import com.salesforce.api.rest.authentication.AuthZ;
 import com.salesforce.api.rest.authentication.AuthZToken;
-import com.salesforce.api.rest.processor.AccountProcessor;
 
 public class SalesforceRest {
     private static final String BASE_URL = "https://na59.salesforce.com/services/data/v42.0/sobjects/";
     private RestService rest = new RestService();
     private static AuthZToken token;
-
-    public static AccountProcessor accounts() {
-        return new AccountProcessor();
-    }
 
     protected RestResponse sendDeleteRequest(String resource) {
         authorize();
