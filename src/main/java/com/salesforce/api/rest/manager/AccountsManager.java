@@ -12,9 +12,12 @@ public class AccountsManager {
     private AccountProcessor processor = new AccountProcessor();
     private List<Account> accounts = new ArrayList<>();
 
-    private static final AccountsManager INSTANCE = new AccountsManager();
+    private static AccountsManager INSTANCE;
 
-    public static AccountsManager getInstance() {
+    public static synchronized AccountsManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new AccountsManager();
+        }
         return INSTANCE;
     }
 
