@@ -29,7 +29,8 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     private Boolean multiple;
 
     /**
-     * @summary - Wraps a WebElement with listbox functionality.
+     * Wraps a WebElement with listbox functionality.
+     *
      * @param element
      *            - element to wrap up
      */
@@ -47,24 +48,50 @@ public class ListboxImpl extends ElementImpl implements Listbox {
         logTrace("Exiting ListboxImpl#init");
     }
 
+    /**
+     * Allows user to override the default element tag of the container for Listbox items. By default,
+     * Listbox will attempt to find child "li" elements for a parent "ul" Listbox. "select" and "datalist"
+     * type Listboxes will attempt to find child "option" elements. Anything other than "li" or
+     * "option" can be defined here
+     *
+     * @param tag
+     *            - tag of the child element to search
+     */
     @Override
     public void overrideOptionTag(String tag) {
+        logTrace("Entering ListboxImpl#overrideOptionTag");
         if (isBlank(tag)) {
             throw new WebException("Option tag cannot be null or empty", driver);
         }
         optionTag = tag.trim();
+        interfaceLog("Overriding Listbox option tag to be [ " + tag + " ]");
+        logTrace("Exiting ListboxImpl#overrideOptionTag");
     }
 
+    /**
+     * Allows user to override the default element tag to click in the container for Listbox items in the
+     * case the element with the serached value does not contain the click event. By default,
+     * Listbox will attempt to click child "li" elements for a parent "ul" Listbox. "select" and "datalist"
+     * type Listboxes will attempt to click child "option" elements. Anything other than "li" or
+     * "option" can be defined here
+     *
+     * @param tag
+     *            - tag of the child element to click
+     */
     @Override
     public void overrideClickableTag(String tag) {
+        logTrace("Entering ListboxImpl#overrideClickableTag");
         if (isBlank(tag)) {
             throw new WebException("Clickable tag cannot be null or empty", driver);
         }
         clickableTag = tag.trim();
+        interfaceLog("Overriding Listbox element to click tag to be [ " + clickableTag + " ]");
+        logTrace("Exiting ListboxImpl#overrideClickableTag");
     }
 
     /**
-     * @summary - Click option with text
+     * Click option with text
+     *
      * @param text
      *            - visible text to select
      */
@@ -73,14 +100,16 @@ public class ListboxImpl extends ElementImpl implements Listbox {
         logTrace("Entering ListboxImpl#select");
 
         if (isNotBlank(text)) {
-            // In the case when the Listbox was create, but element was not found, then optionTag is not set
+            // In the case when the Listbox was created, but element was not found, then optionTag is not set
             // Ensure optionTag is set
             if (isBlank(optionTag)) {
+                logTrace("Tag was empty or null. Determine tag");
                 optionTag = determineOptionTag();
             }
 
             // Use normalize-space on the element itself (.) to limit text search to just the element
             // Using text() would get all text in child elements as well
+            logTrace("Finding child elements in Listbox");
             List<Element> options = getWrappedElement().findElements(By.xpath(
                     ".//" + optionTag + "[normalize-space(.) = " + Quotes.escape(text) + "]"));
 
@@ -94,11 +123,14 @@ public class ListboxImpl extends ElementImpl implements Listbox {
                 throw new OptionNotInListboxException("The value of [ " + text + " ] was not found in Listbox [  "
                         + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, driver);
             }
+            logTrace("Successfully found child elements");
 
             // for each matching element, set to true
+            logTrace("Selecting all matching options");
             for (Element option : options) {
                 setSelected(option, true);
                 if (!isMultiple()) {
+                    logTrace("Listbox is not multiple, only selected first option");
                     return;
                 }
             }
@@ -111,7 +143,8 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     }
 
     /**
-     * @summary - Click option with attribute with specific value
+     * Click option with attribute with specific value
+     *
      * @param text
      *            - value option to select
      */
@@ -120,12 +153,14 @@ public class ListboxImpl extends ElementImpl implements Listbox {
         logTrace("Entering ListboxImpl#selectValue");
         if (isNotBlank(value)) {
 
-            // In the case when the Listbox was create, but element was not found, then optionTag is not set
+            // In the case when the Listbox was created, but element was not found, then optionTag is not set
             // Ensure optionTag is set
             if (isBlank(optionTag)) {
+                logTrace("Tag was empty or null. Determine tag");
                 optionTag = determineOptionTag();
             }
 
+            logTrace("Finding child elements in Listbox");
             List<Element> options = getWrappedElement().findElements(By.xpath(
                     ".//" + optionTag + "[@value = " + Quotes.escape(value) + "]"));
 
@@ -140,10 +175,13 @@ public class ListboxImpl extends ElementImpl implements Listbox {
                         + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, driver);
             }
 
+            logTrace("Successfully found child elements");
+
             // for each matching element, set to true
             for (Element option : options) {
                 setSelected(option, true);
                 if (!isMultiple()) {
+                    logTrace("Listbox is not multiple, only selected first option");
                     return;
                 }
             }
@@ -155,7 +193,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     }
 
     /**
-     * @summary - Deselect all selection options only if multi-select Listbox
+     * Deselect all selection options only if multi-select Listbox
      */
     @Override
     public void deselectAll() {
@@ -164,6 +202,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
             throw new WebException("You may only deselect all options of a multi-select");
         }
 
+        logTrace("Deselecting all options");
         for (Element option : getOptions()) {
             setSelected(option, false);
         }
@@ -171,7 +210,8 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     }
 
     /**
-     * @summary - Click option with text
+     * Click option with text
+     *
      * @param text
      *            - visible text to select
      */
@@ -182,6 +222,7 @@ public class ListboxImpl extends ElementImpl implements Listbox {
             throw new WebException("You may only deselect options of a multi-select");
         }
 
+        logTrace("Finding child elements in Listbox");
         List<Element> options = getWrappedElement().findElements(By.xpath(
                 ".//" + optionTag + "[normalize-space(.) =" + Quotes.escape(text) + "]"));
 
@@ -200,19 +241,21 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     }
 
     /**
-     * @summary - return first option that is select in list
+     * return first option that is select in list
+     *
      * @return first option that is select in list
      */
     @Override
     public Element getFirstSelectedOption() {
         logTrace("Entering ListboxImpl#getFirstSelectedOption");
-        Element option = getAllSelectedOptions().stream().findFirst().orElse(null);
+        Element option = getOptions().stream().filter(Element::isSelected).findFirst().orElse(null);
         logTrace("Exiting ListboxImpl#getFirstSelectedOption");
         return option;
     }
 
     /**
-     * @summary - return list of all options in the select
+     * return list of all options in the select
+     *
      * @return list of all options in the select.
      */
     @Override
@@ -224,7 +267,8 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     }
 
     /**
-     * @summary - list of all option values in the select.
+     * list of all option values in the select.
+     *
      * @return list of all option values in the select.
      */
     @Override
@@ -237,7 +281,8 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     }
 
     /**
-     * @summary - Wraps Selenium's method.
+     * Wraps Selenium's method.
+     *
      * @return list of all option values in the select.
      */
     @Override
@@ -271,15 +316,20 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     }
 
     private String determineOptionTag() {
+        logTrace("Entering ListboxImpl#determineOptionTag");
         String tagName = getWrappedElement().getTagName();
 
         switch (tagName.toLowerCase()) {
             case "ul":
+                logTrace("Determined option tag for [ " + tagName + " ] to be [ li ]");
+                logTrace("Exiting ListboxImpl#determineOptionTag");
                 return "li";
 
             case "select":
             case "datalist":
             default:
+                logTrace("Determined option tag for [ " + tagName + " ] to be [ option ]");
+                logTrace("Exiting ListboxImpl#determineOptionTag");
                 return "option";
         }
     }
