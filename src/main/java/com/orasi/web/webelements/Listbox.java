@@ -2,8 +2,6 @@ package com.orasi.web.webelements;
 
 import java.util.List;
 
-import org.openqa.selenium.WebElement;
-
 import com.orasi.web.webelements.impl.ListboxImpl;
 import com.orasi.web.webelements.impl.internal.ImplementedBy;
 
@@ -12,63 +10,105 @@ import com.orasi.web.webelements.impl.internal.ImplementedBy;
  */
 @ImplementedBy(ListboxImpl.class)
 public interface Listbox extends Element {
-    /**
-     * @summary - Wraps Selenium's method.
-     * @param value
-     *            - the value/option to select.
-     * @see org.openqa.selenium.support.ui.Select#selectByVisibleText(String)
-     */
-    void select(String value);
 
     /**
-     * @summary - Wraps Selenium's method.
-     * @param value
-     *            - the value/option to select.
-     * @see org.openqa.selenium.support.ui.Select#selectByValue(String)
-     */
-    void selectValue(String value);
-
-    /**
-     * @summary - Wraps Selenium's method.
-     * @see org.openqa.selenium.support.ui.Select#deselectAll()
+     * Deselect all selection options only if multi-select Listbox
      */
     void deselectAll();
 
     /**
-     * @summary - Wraps Selenium's method.
+     * Click option with text
+     * 
      * @param text
-     *            - text to deselect by visible text
-     * @see org.openqa.selenium.support.ui.Select#deselectByVisibleText(String)
+     *            - visible text to select
      */
     void deselectByVisibleText(String text);
 
     /**
-     * @author Justin
-     * @return WebElement
-     * @see org.openqa.selenium.support.ui.Select#getFirstSelectedOption()
+     * return first option that is select in list
+     * 
+     * @return first option that is select in list
      */
-    WebElement getFirstSelectedOption();
+    Element getFirstSelectedOption();
 
     /**
-     * @author Justin
-     * @return WebElement list of all options in a given listbox
-     * @see org.openqa.selenium.WebElement#isSelected()
+     * return list of all options in the select
+     * 
+     * @return list of all options in the select.
      */
-    List<WebElement> getOptions();
+    List<Element> getOptions();
 
     /**
-     * @author Justin
-     * @return WebElement list of all selected options in a given listbox
-     * @see org.openqa.selenium.WebElement#isSelected()
+     * list of all option values in the select.
+     * 
+     * @return list of all option values in the select.
      */
-    List<WebElement> getAllSelectedOptions();
+    List<String> getOptionValues();
 
     /**
-     * @author Justin
-     * @return {@link boolean} TRUE if element is currently select
+     * Wraps Selenium's method.
+     * 
+     * @return list of all option values in the select.
+     */
+    List<String> getOptionTextValues();
+
+    /**
+     * returns list of all selected options in a given listbox
+     * 
+     * @return list of all selected options in a given listbox
+     */
+    List<Element> getAllSelectedOptions();
+
+    /**
+     * Checks Listbox for multiple attribute
+     * 
+     * @return boolean based on if multiple attribute is found
+     */
+    boolean isMultiple();
+
+    /**
+     * @return TRUE if element is currently selected using Selenium isSelected
      * @see org.openqa.selenium.WebElement#isSelected()
      */
     boolean isSelected(String option);
 
-    boolean isMultiple();
+    /**
+     *
+     * Allows user to override the default element tag of the container for Listbox items. By default,
+     * Listbox will attempt to find child "li" elements for a parent "ul" Listbox. "select" and "datalist"
+     * type Listboxes will attempt to find child "option" elements. Anything other than "li" or
+     * "option" can be defined here
+     * 
+     * @param tag
+     *            - xpath tag of element that code should search for option text or value attribute
+     */
+    public void overrideOptionTag(String tag);
+
+    /**
+     * Allows user to override the default element tag to click in the container for Listbox items in the
+     * case the element with the serached value does not contain the click event. By default,
+     * Listbox will attempt to click child "li" elements for a parent "ul" Listbox. "select" and "datalist"
+     * type Listboxes will attempt to click child "option" elements. Anything other than "li" or
+     * "option" can be defined here
+     * 
+     * @param tag
+     *            - xpath tag of element that code should click for found options
+     */
+    public void overrideClickableTag(String tag);
+
+    /**
+     * Click option with text
+     * 
+     * @param text
+     *            - visible text to select
+     */
+    void select(String value);
+
+    /**
+     * Click option with attribute with specific value
+     * 
+     * @param text
+     *            - value option to select
+     */
+    void selectValue(String value);
 }

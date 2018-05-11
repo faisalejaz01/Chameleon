@@ -2,116 +2,190 @@ package com.orasi.web.webelements.impl;
 
 import static com.orasi.utils.TestReporter.interfaceLog;
 import static com.orasi.utils.TestReporter.logTrace;
+import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Quotes;
 
 import com.orasi.web.OrasiDriver;
+import com.orasi.web.WebException;
 import com.orasi.web.exceptions.OptionNotInListboxException;
-import com.orasi.web.exceptions.SelectElementNotFoundException;
+import com.orasi.web.webelements.Element;
 import com.orasi.web.webelements.Listbox;
 
 /**
  * Wrapper around a WebElement for the Select class in Selenium.
  */
+@SuppressWarnings("unchecked")
 public class ListboxImpl extends ElementImpl implements Listbox {
-    private org.openqa.selenium.support.ui.Select innerSelect;
+    private String optionTag = "";
+    private String clickableTag = "";
+    private Boolean multiple;
 
     /**
-     * @summary - Wraps a WebElement with listbox functionality.
+     * Wraps a WebElement with listbox functionality.
+     *
      * @param element
      *            - element to wrap up
      */
 
     public ListboxImpl(OrasiDriver driver, By by) {
         super(driver, by);
-        this.innerSelect = null;
+
         logTrace("Entering ListboxImpl#init");
-        // If element is null at this point, then do not try and set to selenium Select - otherwise hits a proxy exception
+
         if (element != null) {
-            this.innerSelect = new org.openqa.selenium.support.ui.Select(getWrappedElement());
+            optionTag = determineOptionTag();
+            multiple = isMultiple();
         }
 
         logTrace("Exiting ListboxImpl#init");
     }
 
     /**
-     * @summary - Wraps Selenium's method.
+     * Allows user to override the default element tag of the container for Listbox items. By default,
+     * Listbox will attempt to find child "li" elements for a parent "ul" Listbox. "select" and "datalist"
+     * type Listboxes will attempt to find child "option" elements. Anything other than "li" or
+     * "option" can be defined here
+     *
+     * @param tag
+     *            - tag of the child element to search
+     */
+    @Override
+    public void overrideOptionTag(String tag) {
+        logTrace("Entering ListboxImpl#overrideOptionTag");
+        if (isBlank(tag)) {
+            throw new WebException("Option tag cannot be null or empty", driver);
+        }
+        optionTag = tag.trim();
+        interfaceLog("Overriding Listbox option tag to be [ " + tag + " ]");
+        logTrace("Exiting ListboxImpl#overrideOptionTag");
+    }
+
+    /**
+     * Allows user to override the default element tag to click in the container for Listbox items in the
+     * case the element with the serached value does not contain the click event. By default,
+     * Listbox will attempt to click child "li" elements for a parent "ul" Listbox. "select" and "datalist"
+     * type Listboxes will attempt to click child "option" elements. Anything other than "li" or
+     * "option" can be defined here
+     *
+     * @param tag
+     *            - tag of the child element to click
+     */
+    @Override
+    public void overrideClickableTag(String tag) {
+        logTrace("Entering ListboxImpl#overrideClickableTag");
+        if (isBlank(tag)) {
+            throw new WebException("Clickable tag cannot be null or empty", driver);
+        }
+        clickableTag = tag.trim();
+        interfaceLog("Overriding Listbox element to click tag to be [ " + clickableTag + " ]");
+        logTrace("Exiting ListboxImpl#overrideClickableTag");
+    }
+
+    /**
+     * Click option with text
+     *
      * @param text
      *            - visible text to select
-     * @see org.openqa.selenium.support.ui.Select#selectByVisibleText(String)
      */
     @Override
     public void select(String text) {
         logTrace("Entering ListboxImpl#select");
-        if (!text.isEmpty()) {
-            try {
-                try {
-                    validateSelectNotNull().selectByVisibleText(text);
-                } catch (RuntimeException rte) {
-                    interfaceLog("Select option [ <b>" + text.toString()
-                            + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]", true);
-                    throw rte;
-                }
 
-                interfaceLog("Select option [ <b>" + text.toString()
-                        + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]");
-            } catch (NoSuchElementException e) {
-                String optionList = "";
-                List<WebElement> optionsList = validateSelectNotNull().getOptions();
-                for (WebElement option : optionsList) {
-                    optionList += option.getText() + " | ";
-                }
+        if (isNotBlank(text)) {
+            // In the case when the Listbox was created, but element was not found, then optionTag is not set
+            // Ensure optionTag is set
+            if (isBlank(optionTag)) {
+                logTrace("Tag was empty or null. Determine tag");
+                optionTag = determineOptionTag();
+            }
+
+            // Use normalize-space on the element itself (.) to limit text search to just the element
+            // Using text() would get all text in child elements as well
+            logTrace("Finding child elements in Listbox");
+            List<Element> options = getWrappedElement().findElements(By.xpath(
+                    ".//" + optionTag + "[normalize-space(.) = " + Quotes.escape(text) + "]"));
+
+            // If no options found for requested text, collect all option values and report out
+            if (options.isEmpty()) {
+                String optionList = getOptionTextValues().stream().collect(Collectors.joining(" | "));
+
                 interfaceLog(" The value of <b>[ " + text + "</b> ] was not found in Listbox [  <b>"
                         + getElementLocatorInfo() + " </b>]. Acceptable values are " + optionList + " ]");
                 logTrace("Exiting ListboxImpl#select");
                 throw new OptionNotInListboxException("The value of [ " + text + " ] was not found in Listbox [  "
                         + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, driver);
             }
+            logTrace("Successfully found child elements");
+
+            // for each matching element, set to true
+            logTrace("Selecting all matching options");
+            for (Element option : options) {
+                setSelected(option, true);
+                if (!isMultiple()) {
+                    logTrace("Listbox is not multiple, only selected first option");
+                    return;
+                }
+            }
+
         } else {
-            interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
+            interfaceLog("Skipping selection of option in Listbox [ <b>" + getElementLocatorInfo() + " </b> ]");
         }
 
         logTrace("Exiting ListboxImpl#select");
     }
 
     /**
-     * @summary - Wraps Selenium's method.
-     * @param value
-     *            - option value to select
-     * @see org.openqa.selenium.support.ui.Select#selectByVisibleText(String)
+     * Click option with attribute with specific value
+     *
+     * @param text
+     *            - value option to select
      */
     @Override
     public void selectValue(String value) {
         logTrace("Entering ListboxImpl#selectValue");
-        if (!value.isEmpty()) {
-            try {
-                try {
-                    validateSelectNotNull().selectByValue(value);
-                } catch (RuntimeException rte) {
-                    interfaceLog("Select option [ <b>" + value.toString()
-                            + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]", true);
-                    throw rte;
-                }
+        if (isNotBlank(value)) {
 
-                interfaceLog("Select option [ <b>" + value.toString()
-                        + "</b> ] from Listbox [  <b>" + getElementLocatorInfo() + " </b>]");
-            } catch (NoSuchElementException e) {
-                String optionList = "";
-                List<WebElement> optionsList = validateSelectNotNull().getOptions();
-                for (WebElement option : optionsList) {
-                    optionList += option.getAttribute("value") + " | ";
-                }
+            // In the case when the Listbox was created, but element was not found, then optionTag is not set
+            // Ensure optionTag is set
+            if (isBlank(optionTag)) {
+                logTrace("Tag was empty or null. Determine tag");
+                optionTag = determineOptionTag();
+            }
+
+            logTrace("Finding child elements in Listbox");
+            List<Element> options = getWrappedElement().findElements(By.xpath(
+                    ".//" + optionTag + "[@value = " + Quotes.escape(value) + "]"));
+
+            // If no options found for requested value, collect all option values and report out
+            if (options.isEmpty()) {
+                String optionList = getOptionValues().stream().collect(Collectors.joining(" | "));
+
                 interfaceLog(" The value of <b>[ " + value + "</b> ] was not found in Listbox [  <b>"
                         + getElementLocatorInfo() + " </b>]. Acceptable values are " + optionList + " ]");
                 logTrace("Exiting ListboxImpl#selectValue");
                 throw new OptionNotInListboxException("The value of [ " + value + " ] was not found in Listbox [  "
                         + getElementLocatorInfo() + " ]. Acceptable values are " + optionList, driver);
             }
+
+            logTrace("Successfully found child elements");
+
+            // for each matching element, set to true
+            for (Element option : options) {
+                setSelected(option, true);
+                if (!isMultiple()) {
+                    logTrace("Listbox is not multiple, only selected first option");
+                    return;
+                }
+            }
+
         } else {
             interfaceLog("Skipping input to Textbox [ <b>" + getElementLocatorInfo() + " </b> ]");
         }
@@ -119,97 +193,166 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     }
 
     /**
-     * @summary - Wraps Selenium's method.
-     * @see org.openqa.selenium.support.ui.Select#deselectAll()
+     * Deselect all selection options only if multi-select Listbox
      */
     @Override
     public void deselectAll() {
         logTrace("Entering ListboxImpl#deselectAll");
-        validateSelectNotNull().deselectAll();
+        if (!isMultiple()) {
+            throw new WebException("You may only deselect all options of a multi-select");
+        }
+
+        logTrace("Deselecting all options");
+        for (Element option : getOptions()) {
+            setSelected(option, false);
+        }
         logTrace("Exiting ListboxImpl#deselectAll");
     }
 
     /**
-     * @summary - Wraps Selenium's method.
-     * @return list of all options in the select.
-     * @see org.openqa.selenium.support.ui.Select#getOptions()
+     * Click option with text
+     *
+     * @param text
+     *            - visible text to select
      */
     @Override
-    public List<WebElement> getOptions() {
+    public void deselectByVisibleText(String text) {
+        logTrace("Entering ListboxImpl#deselectByVisibleText");
+        if (!isMultiple()) {
+            throw new WebException("You may only deselect options of a multi-select");
+        }
+
+        logTrace("Finding child elements in Listbox");
+        List<Element> options = getWrappedElement().findElements(By.xpath(
+                ".//" + optionTag + "[normalize-space(.) =" + Quotes.escape(text) + "]"));
+
+        for (Element option : options) {
+            setSelected(option, false);
+        }
+        logTrace("Exiting ListboxImpl#deselectByVisibleText");
+    }
+
+    @Override
+    public List<Element> getAllSelectedOptions() {
+        logTrace("Entering ListboxImpl#getAllSelectedOptions");
+        List<Element> options = getOptions().stream().filter(Element::isSelected).collect(toList());
+        logTrace("Exiting ListboxImpl#getAllSelectedOptions");
+        return options;
+    }
+
+    /**
+     * return first option that is select in list
+     *
+     * @return first option that is select in list
+     */
+    @Override
+    public Element getFirstSelectedOption() {
+        logTrace("Entering ListboxImpl#getFirstSelectedOption");
+        Element option = getOptions().stream().filter(Element::isSelected).findFirst().orElse(null);
+        logTrace("Exiting ListboxImpl#getFirstSelectedOption");
+        return option;
+    }
+
+    /**
+     * return list of all options in the select
+     *
+     * @return list of all options in the select.
+     */
+    @Override
+    public List<Element> getOptions() {
         logTrace("Entering ListboxImpl#getOptions");
-        List<WebElement> options = validateSelectNotNull().getOptions();
+        List<Element> options = getWrappedElement().findElements(By.xpath(".//" + optionTag));
         logTrace("Exiting ListboxImpl#getOptions");
         return options;
     }
 
     /**
-     * @summary - Wraps Selenium's method.
-     * @param text
-     *            text to deselect by visible text
-     * @see org.openqa.selenium.support.ui.Select#deselectByVisibleText(String)
+     * list of all option values in the select.
+     *
+     * @return list of all option values in the select.
      */
     @Override
-    public void deselectByVisibleText(String text) {
-        logTrace("Entering ListboxImpl#deselectByVisibleText");
-        validateSelectNotNull().deselectByVisibleText(text);
-        logTrace("Exiting ListboxImpl#deselectByVisibleText");
+    public List<String> getOptionValues() {
+        logTrace("Entering ListboxImpl#getOptionValues");
+        // Get attribute of value from each option and return in a List
+        List<String> values = getOptions().stream().map(e -> e.getAttribute("value")).map(String::trim).collect(toList());
+        logTrace("Exiting ListboxImpl#getOptionValues");
+        return values;
     }
 
     /**
-     * @summary - Wraps Selenium's method.
-     * @return WebElement of the first selected option.
-     * @see org.openqa.selenium.support.ui.Select#getFirstSelectedOption()
+     * Wraps Selenium's method.
+     *
+     * @return list of all option values in the select.
      */
     @Override
-    public WebElement getFirstSelectedOption() {
-        logTrace("Entering ListboxImpl#getFirstSelectedOption");
-        try {
-            WebElement option = validateSelectNotNull().getFirstSelectedOption();
-            logTrace("Exiting ListboxImpl#deselectByVisibleText");
-            return option;
-        } catch (NoSuchElementException nse) {
-            logTrace("Exiting ListboxImpl#deselectByVisibleText");
-            return null;
-        }
+    public List<String> getOptionTextValues() {
+        logTrace("Entering ListboxImpl#getOptionTextValues");
+        // Get text value from each option and return in a List
+        List<String> values = getOptions().stream().map(WebElement::getText).map(String::trim).collect(toList());
+        logTrace("Exiting ListboxImpl#getOptionTextValues");
+        return values;
     }
 
-    /**
-     * @see org.openqa.selenium.WebElement#isSelected()
-     */
     @Override
     public boolean isSelected(String option) {
         logTrace("Entering ListboxImpl#isSelected");
-        List<WebElement> selectedOptions = validateSelectNotNull().getAllSelectedOptions();
-        for (WebElement selectOption : selectedOptions) {
-            if (selectOption.getText().equals(option)) {
-                logTrace("Exiting ListboxImpl#isSelected");
-                return true;
-            }
-        }
+        boolean selected = getAllSelectedOptions().stream().anyMatch(selectedOption -> selectedOption.getText().equals(option));
         logTrace("Exiting ListboxImpl#isSelected");
-        return false;
-    }
-
-    @Override
-    public List<WebElement> getAllSelectedOptions() {
-        logTrace("Entering ListboxImpl#getAllSelectedOptions");
-        List<WebElement> options = validateSelectNotNull().getAllSelectedOptions();
-        logTrace("Exiting ListboxImpl#getAllSelectedOptions");
-        return options;
+        return selected;
     }
 
     @Override
     public boolean isMultiple() {
         logTrace("Entering ListboxImpl#isMultiple");
-        boolean multiple = validateSelectNotNull().isMultiple();
+        if (multiple == null) {
+            String value = getWrappedElement().getAttribute("multiple");
+
+            // The atoms normalize the returned value, but check for "false"
+            multiple = (value != null && !"false".equals(value));
+        }
         logTrace("Exiting ListboxImpl#isMultiple");
         return multiple;
     }
 
-    private Select validateSelectNotNull() {
-        if (innerSelect == null) {
-            throw new SelectElementNotFoundException("Select Element was not created", driver);
+    private String determineOptionTag() {
+        logTrace("Entering ListboxImpl#determineOptionTag");
+        String tagName = getWrappedElement().getTagName();
+
+        switch (tagName.toLowerCase()) {
+            case "ul":
+                logTrace("Determined option tag for [ " + tagName + " ] to be [ li ]");
+                logTrace("Exiting ListboxImpl#determineOptionTag");
+                return "li";
+
+            case "select":
+            case "datalist":
+            default:
+                logTrace("Determined option tag for [ " + tagName + " ] to be [ option ]");
+                logTrace("Exiting ListboxImpl#determineOptionTag");
+                return "option";
         }
-        return innerSelect;
+    }
+
+    /**
+     * Select or deselect specified option
+     *
+     * @param option
+     *            The option which state needs to be changed
+     * @param select
+     *            Indicates whether the option needs to be selected (true) or
+     *            deselected (false)
+     */
+    private void setSelected(final Element option, boolean select) {
+        boolean isSelected = option.isSelected();
+        if ((!isSelected && select) || (isSelected && !select)) {
+            if (isBlank(clickableTag)) {
+                option.click();
+            } else {
+                String currentXpath = option.getElementLocatorInfo().replace("By.xpath: ", "");
+                option.findElement(By.xpath(currentXpath + "/.//" + clickableTag)).click();
+            }
+
+        }
     }
 }
