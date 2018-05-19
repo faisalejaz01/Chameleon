@@ -89,9 +89,7 @@ public class Randomness {
     }
 
     public static Date randomDate() {
-
         int month = new Random().nextInt(Calendar.DECEMBER) + Calendar.JANUARY;
-        ;
         int year = Randomness.randomNumberBetween(1940, 2016);
         int day = new Random().nextInt(30) + 1;
 

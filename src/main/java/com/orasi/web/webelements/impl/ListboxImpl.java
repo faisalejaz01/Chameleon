@@ -6,6 +6,7 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -110,8 +111,10 @@ public class ListboxImpl extends ElementImpl implements Listbox {
             // Use normalize-space on the element itself (.) to limit text search to just the element
             // Using text() would get all text in child elements as well
             logTrace("Finding child elements in Listbox");
-            List<Element> options = getWrappedElement().findElements(By.xpath(
+            List<WebElement> elements = getWrappedElement().findElements(By.xpath(
                     ".//" + optionTag + "[normalize-space(.) = " + Quotes.escape(text) + "]"));
+            List<Element> options = new ArrayList<>();
+            elements.forEach(option -> options.add(new ElementImpl(driver, by, option)));
 
             // If no options found for requested text, collect all option values and report out
             if (options.isEmpty()) {
@@ -161,8 +164,10 @@ public class ListboxImpl extends ElementImpl implements Listbox {
             }
 
             logTrace("Finding child elements in Listbox");
-            List<Element> options = getWrappedElement().findElements(By.xpath(
+            List<WebElement> elements = getWrappedElement().findElements(By.xpath(
                     ".//" + optionTag + "[@value = " + Quotes.escape(value) + "]"));
+            List<Element> options = new ArrayList<>();
+            elements.forEach(option -> options.add(new ElementImpl(driver, by, option)));
 
             // If no options found for requested value, collect all option values and report out
             if (options.isEmpty()) {
@@ -223,8 +228,10 @@ public class ListboxImpl extends ElementImpl implements Listbox {
         }
 
         logTrace("Finding child elements in Listbox");
-        List<Element> options = getWrappedElement().findElements(By.xpath(
+        List<WebElement> elements = getWrappedElement().findElements(By.xpath(
                 ".//" + optionTag + "[normalize-space(.) =" + Quotes.escape(text) + "]"));
+        List<Element> options = new ArrayList<>();
+        elements.forEach(option -> options.add(new ElementImpl(driver, by, option)));
 
         for (Element option : options) {
             setSelected(option, false);
@@ -261,7 +268,13 @@ public class ListboxImpl extends ElementImpl implements Listbox {
     @Override
     public List<Element> getOptions() {
         logTrace("Entering ListboxImpl#getOptions");
-        List<Element> options = getWrappedElement().findElements(By.xpath(".//" + optionTag));
+        if (getWrappedElement() != null) {
+            optionTag = determineOptionTag();
+            multiple = isMultiple();
+        }
+        List<WebElement> elements = getWrappedElement().findElements(By.xpath(".//" + optionTag));
+        List<Element> options = new ArrayList<>();
+        elements.forEach(option -> options.add(new ElementImpl(driver, by, option)));
         logTrace("Exiting ListboxImpl#getOptions");
         return options;
     }
@@ -349,8 +362,8 @@ public class ListboxImpl extends ElementImpl implements Listbox {
             if (isBlank(clickableTag)) {
                 option.click();
             } else {
-                String currentXpath = option.getElementLocatorInfo().replace("By.xpath: ", "");
-                option.findElement(By.xpath(currentXpath + "/.//" + clickableTag)).click();
+                WebElement el = option.findWebElement(By.xpath(".//" + clickableTag));
+                new ElementImpl(driver, by, el).click();
             }
 
         }

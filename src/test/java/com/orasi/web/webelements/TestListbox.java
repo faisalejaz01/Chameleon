@@ -246,7 +246,7 @@ public class TestListbox extends WebBaseTest {
         listButton.click();
 
         Listbox listbox = driver.findListbox(By.className("dropdown-menu"));
-        listbox.syncVisible();
+        // listbox.syncVisible();
         listbox.select("HTML");
         Assert.assertTrue(listButton.getText().equals("HTML"));
     }

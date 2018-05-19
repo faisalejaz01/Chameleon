@@ -7,9 +7,8 @@ import com.orasi.api.APIBaseTest;
 import com.orasi.api.soapServices.exceptions.HeaderNotFoundException;
 import com.orasi.api.soapServices.exceptions.MissingFunctionParameterValueException;
 import com.orasi.api.soapServices.exceptions.SoapException;
-import com.orasi.api.soapServices.helpers.GetInfoByZip;
-import com.orasi.api.soapServices.helpers.USZipService;
-import com.orasi.utils.Sleeper;
+import com.orasi.api.soapServices.helpers.GetActorsById;
+import com.orasi.api.soapServices.helpers.SoapTraining;
 import com.orasi.utils.exception.XPathInvalidExpression;
 import com.orasi.utils.exception.XPathNotFoundException;
 import com.orasi.utils.exception.XPathNullNodeValueException;
@@ -24,7 +23,7 @@ public class TestSoapService extends APIBaseTest {
     @Title("createService")
     @Test
     public void createService() {
-        USZipService usZip = new USZipService();
+        SoapTraining usZip = new SoapTraining();
         Assert.assertNotNull(usZip);
     }
 
@@ -33,7 +32,7 @@ public class TestSoapService extends APIBaseTest {
     @Title("createOperation")
     @Test(dependsOnMethods = "createService")
     public void createOperation() {
-        GetInfoByZip getInfo = new GetInfoByZip();
+        GetActorsById getInfo = new GetActorsById();
         Assert.assertNotNull(getInfo);
     }
 
@@ -42,8 +41,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("createOperation_WithCSVData")
     @Test(dependsOnMethods = "createOperation")
     public void createOperation_WithCSVData() {
-        GetInfoByZip getInfo = new GetInfoByZip("Main", "CSV");
-        Assert.assertTrue(getInfo.getRequestZip().equals("27410"));
+        GetActorsById getInfo = new GetActorsById("Main", "CSV");
+        Assert.assertTrue(getInfo.getRequestActorId().equals("1"));
     }
 
     @Features("API")
@@ -51,8 +50,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("createOperation_WithXLSData")
     @Test(dependsOnMethods = "createOperation")
     public void createOperation_WithXLSData() {
-        GetInfoByZip getInfo = new GetInfoByZip("Main", "XLS");
-        Assert.assertTrue(getInfo.getRequestZip().equals("27410"));
+        GetActorsById getInfo = new GetActorsById("Main", "XLS");
+        Assert.assertTrue(getInfo.getRequestActorId().equals("1"));
     }
 
     @Features("API")
@@ -60,8 +59,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("createOperation_WithXLSXData")
     @Test(dependsOnMethods = "createOperation")
     public void createOperation_WithXLSXData() {
-        GetInfoByZip getInfo = new GetInfoByZip("Main", "XLSX");
-        Assert.assertTrue(getInfo.getRequestZip().equals("27410"));
+        GetActorsById getInfo = new GetActorsById("Main", "XLSX");
+        Assert.assertTrue(getInfo.getRequestActorId().equals("1"));
     }
 
     @Features("API")
@@ -69,7 +68,7 @@ public class TestSoapService extends APIBaseTest {
     @Title("addRequestHeader")
     @Test(dependsOnMethods = "createOperation")
     public void addRequestHeader() {
-        GetInfoByZip getInfo = new GetInfoByZip();
+        GetActorsById getInfo = new GetActorsById();
         getInfo.addRequestHeader("blah", "blah");
         Assert.assertNotNull(getInfo);
     }
@@ -79,8 +78,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("getNumberOfRequestNodesByXPath")
     @Test(dependsOnMethods = "createOperation")
     public void getNumberOfRequestNodesByXPath() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        Assert.assertTrue(getInfo.getNumberOfRequestNodesByXPath("/Envelope/Body/GetInfoByZIP/USZip") == 1);
+        GetActorsById getInfo = new GetActorsById();
+        Assert.assertTrue(getInfo.getNumberOfRequestNodesByXPath("/Envelope/Body/getActorsByIdRequest/actor_id") == 1);
     }
 
     @Features("API")
@@ -88,7 +87,7 @@ public class TestSoapService extends APIBaseTest {
     @Title("setSoapVersion")
     @Test(dependsOnMethods = "createOperation")
     public void setSoapVersion() {
-        GetInfoByZip getInfo = new GetInfoByZip();
+        GetActorsById getInfo = new GetActorsById();
         getInfo.setSoapVersion();
     }
 
@@ -97,8 +96,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("getServiceURL")
     @Test(dependsOnMethods = "createOperation")
     public void getServiceURL() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        Assert.assertTrue(getInfo.getServiceURL().equals("http://www.webservicex.net/uszip.asmx?wsdl"));
+        GetActorsById getInfo = new GetActorsById();
+        Assert.assertTrue(getInfo.getServiceURL().equals("https://training-server.herokuapp.com:443/soap"));
     }
 
     @Features("API")
@@ -106,8 +105,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("getServiceName")
     @Test(dependsOnMethods = "createOperation")
     public void getServiceName() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        Assert.assertTrue(getInfo.getServiceName().equals("USZipSoap"));
+        GetActorsById getInfo = new GetActorsById();
+        Assert.assertTrue(getInfo.getServiceName().equals("SoapTraining"));
     }
 
     @Features("API")
@@ -115,8 +114,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("getOperationName")
     @Test(dependsOnMethods = "createOperation")
     public void getOperationName() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        Assert.assertTrue(getInfo.getOperationName().equals("GetInfoByZIP"));
+        GetActorsById getInfo = new GetActorsById();
+        Assert.assertTrue(getInfo.getOperationName().equals("getActorsById"));
     }
 
     @Features("API")
@@ -124,7 +123,7 @@ public class TestSoapService extends APIBaseTest {
     @Title("getRequest")
     @Test(dependsOnMethods = "createOperation")
     public void getRequest() {
-        GetInfoByZip getInfo = new GetInfoByZip();
+        GetActorsById getInfo = new GetActorsById();
         Assert.assertTrue(!getInfo.getRequest().isEmpty());
     }
 
@@ -133,9 +132,9 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_AddAttribute")
     @Test(dependsOnMethods = "createOperation")
     public void setRequestNodeValueByXPath_HandleValueFunctions_AddAttribute() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:addattribute;blah");
-        Assert.assertTrue(getInfo.getRequest().contains("<web:USZip blah=\"\""));
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:addattribute;blah");
+        Assert.assertTrue(getInfo.getRequest().contains("<my:actor_id blah=\"\""));
     }
 
     @Features("API")
@@ -143,8 +142,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_AddAttribute_MissingParameter")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = MissingFunctionParameterValueException.class)
     public void setRequestNodeValueByXPath_HandleValueFunctions_AddAttribute_MissingParameter() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:addattribute");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:addattribute");
     }
 
     @Features("API")
@@ -152,8 +151,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_AddNode")
     @Test(dependsOnMethods = "createOperation")
     public void setRequestNodeValueByXPath_HandleValueFunctions_AddNode() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP", "fx:addnode;blah");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest", "fx:addnode;blah");
         Assert.assertTrue(getInfo.getRequest().contains("<blah/>"));
     }
 
@@ -162,8 +161,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_AddNode_MissingParameter")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = MissingFunctionParameterValueException.class)
     public void setRequestNodeValueByXPath_HandleValueFunctions_AddNode_MissingParameter() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:addnode");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:addnode");
     }
 
     @Features("API")
@@ -171,8 +170,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_AddNodes")
     @Test(dependsOnMethods = "createOperation")
     public void setRequestNodeValueByXPath_HandleValueFunctions_AddNodes() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP", "fx:addnodes;blah/blah2/blah3");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest", "fx:addnodes;blah/blah2/blah3");
         Assert.assertTrue(getInfo.getRequest().replace(System.getProperty("line.separator"), "").replaceAll(" ", "").contains("<blah><blah2><blah3/></blah2></blah>"));
     }
 
@@ -181,8 +180,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_AddNodes_MissingParameter")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = MissingFunctionParameterValueException.class)
     public void setRequestNodeValueByXPath_HandleValueFunctions_AddNodes_MissingParameter() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:addnodes");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:addnodes");
     }
 
     @Features("API")
@@ -190,7 +189,7 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_AddNamespace")
     @Test(dependsOnMethods = "createOperation")
     public void setRequestNodeValueByXPath_HandleValueFunctions_AddNamespace() {
-        GetInfoByZip getInfo = new GetInfoByZip();
+        GetActorsById getInfo = new GetActorsById();
         getInfo.setRequestNodeValueByXPath("/Envelope", "fx:addnamespace;xmlns:web2,http://www.webserviceXnew.NET");
         Assert.assertTrue(getInfo.getRequest().contains("xmlns:web2=\"http://www.webserviceXnew.NET\""));
     }
@@ -200,8 +199,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_AddNamespace_MissingParameter")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = MissingFunctionParameterValueException.class)
     public void setRequestNodeValueByXPath_HandleValueFunctions_AddNamespace_MissingParameter() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:addnamespace");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:addnamespace");
     }
 
     @Features("API")
@@ -209,8 +208,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_AddNamespace_MissingURLParameter")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = MissingFunctionParameterValueException.class)
     public void setRequestNodeValueByXPath_HandleValueFunctions_AddNamespace_MissingURLParameter() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:addnamespace;xmlns:web2");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:addnamespace;xmlns:web2");
     }
 
     @Features("API")
@@ -218,9 +217,9 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_GetDateTime")
     @Test(dependsOnMethods = "createOperation")
     public void setRequestNodeValueByXPath_HandleValueFunctions_GetDateTime() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:getdatetime;0");
-        Assert.assertTrue(getInfo.getRequestZip().matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}"));
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:getdatetime;0");
+        Assert.assertTrue(getInfo.getRequestActorId().matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}"));
     }
 
     @Features("API")
@@ -228,8 +227,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_GetDateTime_MissingParameter")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = MissingFunctionParameterValueException.class)
     public void setRequestNodeValueByXPath_HandleValueFunctions_GetDateTime_MissingParameter() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:getdatetime");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:getdatetime");
     }
 
     @Features("API")
@@ -237,9 +236,9 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_GetDate")
     @Test(dependsOnMethods = "createOperation")
     public void setRequestNodeValueByXPath_HandleValueFunctions_GetDate() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:getdate;0");
-        Assert.assertTrue(getInfo.getRequestZip().matches("[0-9]{4}-[0-9]{2}-[0-9]{2}"));
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:getdate;0");
+        Assert.assertTrue(getInfo.getRequestActorId().matches("[0-9]{4}-[0-9]{2}-[0-9]{2}"));
     }
 
     @Features("API")
@@ -247,8 +246,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_GetDate_MissingParameter")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = MissingFunctionParameterValueException.class)
     public void setRequestNodeValueByXPath_HandleValueFunctions_GetDate_MissingParameter() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:getdate");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:getdate");
     }
 
     @Features("API")
@@ -256,10 +255,10 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_RemoveNode")
     @Test(dependsOnMethods = "createOperation")
     public void setRequestNodeValueByXPath_HandleValueFunctions_RemoveAttribute() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("//Envelope/Body/GetInfoByZIP/USZip", "fx:addAttribute;blah");
-        getInfo.setRequestNodeValueByXPath("//Envelope/Body/GetInfoByZIP/USZip/@blah", "fx:removeattribute");
-        Assert.assertTrue(getInfo.getRequest().contains("<web:USZip>27410</web:USZip>"));
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("//Envelope/Body/getActorsByIdRequest/actor_id", "fx:addAttribute;blah");
+        getInfo.setRequestNodeValueByXPath("//Envelope/Body/getActorsByIdRequest/actor_id/@blah", "fx:removeattribute");
+        Assert.assertTrue(getInfo.getRequest().contains("<my:actor_id>1</my:actor_id>"));
     }
 
     @Features("API")
@@ -267,9 +266,9 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_RemoveNode")
     @Test(dependsOnMethods = "createOperation")
     public void setRequestNodeValueByXPath_HandleValueFunctions_RemoveNode() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("//Envelope/Body/GetInfoByZIP/USZip", "fx:removenode");
-        Assert.assertTrue(getInfo.getRequest().contains("<web:GetInfoByZIP/>"));
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("//Envelope/Body/getActorsByIdRequest/actor_id", "fx:removenode");
+        Assert.assertTrue(getInfo.getRequest().contains("<my:getActorsByIdRequest/>"));
     }
 
     @Features("API")
@@ -277,9 +276,9 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_RandomAlphaNumeric")
     @Test(dependsOnMethods = "createOperation")
     public void setRequestNodeValueByXPath_HandleValueFunctions_RandomAlphaNumeric() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:randomalphanumeric;2");
-        Assert.assertTrue(getInfo.getRequestZip().matches("[0-9 a-z A-Z]{2}"));
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:randomalphanumeric;2");
+        Assert.assertTrue(getInfo.getRequestActorId().matches("[0-9 a-z A-Z]{2}"));
     }
 
     @Features("API")
@@ -287,8 +286,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_RandomAlphaNumeric_MissingParameter")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = MissingFunctionParameterValueException.class)
     public void setRequestNodeValueByXPath_HandleValueFunctions_RandomAlphaNumeric_MissingParameter() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:randomalphanumeric");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:randomalphanumeric");
     }
 
     @Features("API")
@@ -296,9 +295,9 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_RandomNumber")
     @Test(dependsOnMethods = "createOperation")
     public void setRequestNodeValueByXPath_HandleValueFunctions_RandomNumber() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:randomnumber;2");
-        Assert.assertTrue(getInfo.getRequestZip().matches("[0-9]{2}"));
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:randomnumber;2");
+        Assert.assertTrue(getInfo.getRequestActorId().matches("[0-9]{2}"));
     }
 
     @Features("API")
@@ -306,8 +305,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_RandomNumber_MissingParameter")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = MissingFunctionParameterValueException.class)
     public void setRequestNodeValueByXPath_HandleValueFunctions_RandomNumber_MissingParameter() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:RandomNumber");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:RandomNumber");
     }
 
     @Features("API")
@@ -315,9 +314,9 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_RandomString")
     @Test(dependsOnMethods = "createOperation")
     public void setRequestNodeValueByXPath_HandleValueFunctions_RandomString() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:RandomString;5");
-        Assert.assertTrue(getInfo.getRequestZip().matches("[a-z A-Z]{5}"));
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:RandomString;5");
+        Assert.assertTrue(getInfo.getRequestActorId().matches("[a-z A-Z]{5}"));
     }
 
     @Features("API")
@@ -325,8 +324,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_RandomNumber_MissingParameter")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = SoapException.class)
     public void setRequestNodeValueByXPath_HandleValueFunctions_InvalidCommand() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:blah");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:blah");
     }
 
     @Features("API")
@@ -334,8 +333,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_HandleValueFunctions_RandomString_MissingParameter")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = MissingFunctionParameterValueException.class)
     public void setRequestNodeValueByXPath_HandleValueFunctions_RandomString_MissingParameter() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "fx:RandomString");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "fx:RandomString");
     }
 
     @Features("API")
@@ -343,7 +342,7 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_XPathNotFoundException")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = XPathNotFoundException.class)
     public void setRequestNodeValueByXPath_XPathNotFoundException() {
-        GetInfoByZip getInfo = new GetInfoByZip();
+        GetActorsById getInfo = new GetActorsById();
         getInfo.setRequestNodeValueByXPath("/Envelope/Body/blah", "blah");
     }
 
@@ -352,7 +351,7 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_InvalidXPathExpression")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = XPathInvalidExpression.class)
     public void setRequestNodeValueByXPath_InvalidXPathExpression() {
-        GetInfoByZip getInfo = new GetInfoByZip();
+        GetActorsById getInfo = new GetActorsById();
         getInfo.setRequestNodeValueByXPath("/Envelope/Body/blah\"", "blah");
     }
 
@@ -361,8 +360,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("setRequestNodeValueByXPath_NullValueExpression")
     @Test(dependsOnMethods = "createOperation", expectedExceptions = XPathNullNodeValueException.class)
     public void setRequestNodeValueByXPath_NullValueExpression() {
-        GetInfoByZip getInfo = new GetInfoByZip();
-        getInfo.setRequestNodeValueByXPath("/Envelope/Body/GetInfoByZIP/USZip", "");
+        GetActorsById getInfo = new GetActorsById();
+        getInfo.setRequestNodeValueByXPath("/Envelope/Body/getActorsByIdRequest/actor_id", "");
     }
 
     @Features("API")
@@ -370,8 +369,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("sendRequest")
     @Test(dependsOnMethods = "createOperation")
     public void sendRequest() {
-        sleep();
-        GetInfoByZip getInfo = new GetInfoByZip();
+
+        GetActorsById getInfo = new GetActorsById();
         getInfo.sendRequest();
     }
 
@@ -380,11 +379,11 @@ public class TestSoapService extends APIBaseTest {
     @Title("sendRequestExpectFault")
     @Test(dependsOnMethods = "sendRequest")
     public void sendRequestExpectFault() {
-        sleep();
-        GetInfoByZip getInfo = new GetInfoByZip();
+
+        GetActorsById getInfo = new GetActorsById();
         getInfo.setRequestNodeValueByXPath("/Envelope/Body", SoapServiceCommands.removeNode());
         getInfo.sendRequest();
-        Assert.assertTrue(getInfo.getResponseStatusCode().equals("soap:Receiver"));
+        Assert.assertTrue(getInfo.getResponseStatusCode().equals("SOAP-ENV:Server"));
     }
 
     @Features("API")
@@ -392,8 +391,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("sendRequest")
     @Test(dependsOnMethods = "createOperation")
     public void sendRequestWithHeaders() {
-        sleep();
-        GetInfoByZip getInfo = new GetInfoByZip();
+
+        GetActorsById getInfo = new GetActorsById();
         getInfo.addRequestHeader("encoding", "UTF-8");
         getInfo.sendRequest();
     }
@@ -403,8 +402,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("getResponse")
     @Test(dependsOnMethods = "sendRequest")
     public void getResponse() {
-        sleep();
-        GetInfoByZip getInfo = new GetInfoByZip();
+
+        GetActorsById getInfo = new GetActorsById();
         getInfo.sendRequest();
         Assert.assertTrue(!getInfo.getResponse().isEmpty());
     }
@@ -414,10 +413,10 @@ public class TestSoapService extends APIBaseTest {
     @Title("getNumberOfResponseNodesByXPath")
     @Test(dependsOnMethods = "sendRequest")
     public void getNumberOfResponseNodesByXPath() {
-        sleep();
-        GetInfoByZip getInfo = new GetInfoByZip();
+
+        GetActorsById getInfo = new GetActorsById();
         getInfo.sendRequest();
-        Assert.assertTrue(getInfo.getNumberOfResponseNodesByXPath("/Envelope/Body/GetInfoByZIPResponse/GetInfoByZIPResult/NewDataSet/Table") == 1);
+        Assert.assertTrue(getInfo.getNumberOfResponseNodesByXPath("/Envelope/Body/getActorsByIdResponse/actor") == 1);
     }
 
     @Features("API")
@@ -425,10 +424,10 @@ public class TestSoapService extends APIBaseTest {
     @Title("getResponseNodeValueByXPath")
     @Test(dependsOnMethods = "sendRequest")
     public void getResponseNodeValueByXPath() {
-        sleep();
-        GetInfoByZip getInfo = new GetInfoByZip();
+
+        GetActorsById getInfo = new GetActorsById();
         getInfo.sendRequest();
-        Assert.assertTrue(getInfo.getResponseNodeValueByXPath("/Envelope/Body/GetInfoByZIPResponse/GetInfoByZIPResult/NewDataSet/Table/ZIP").equals("27410"));
+        Assert.assertTrue(getInfo.getResponseNodeValueByXPath("/Envelope/Body/getActorsByIdResponse/actor/actor_id").equals("1"));
     }
 
     @Features("API")
@@ -436,10 +435,10 @@ public class TestSoapService extends APIBaseTest {
     @Title("getResponseHeaders")
     @Test(dependsOnMethods = "sendRequest")
     public void getResponseHeaders() {
-        sleep();
-        GetInfoByZip getInfo = new GetInfoByZip();
+
+        GetActorsById getInfo = new GetActorsById();
         getInfo.sendRequest();
-        Assert.assertTrue(getInfo.getResponseHeader("Content-Type").equals("application/soap+xml; charset=utf-8"));
+        Assert.assertTrue(getInfo.getResponseHeader("Content-Type").equals("text/xml; charset=utf-8"));
     }
 
     @Features("API")
@@ -447,8 +446,8 @@ public class TestSoapService extends APIBaseTest {
     @Title("getResponseHeaders_NoneFound")
     @Test(dependsOnMethods = "sendRequest", expectedExceptions = HeaderNotFoundException.class)
     public void getResponseHeaders_NoneFound() {
-        sleep();
-        GetInfoByZip getInfo = new GetInfoByZip();
+
+        GetActorsById getInfo = new GetActorsById();
         getInfo.sendRequest();
         getInfo.getResponseHeader("blah");
     }
@@ -458,10 +457,10 @@ public class TestSoapService extends APIBaseTest {
     @Title("validateResponse_WithCSVData")
     @Test(dependsOnMethods = "sendRequest")
     public void validateResponse_WithCSVData() {
-        sleep();
-        GetInfoByZip getInfo = new GetInfoByZip();
+
+        GetActorsById getInfo = new GetActorsById();
         getInfo.sendRequest();
-        Assert.assertTrue(getInfo.validateResponse("/excelsheets/GetInfoByZipResponse_csv.csv", "Main"));
+        Assert.assertTrue(getInfo.validateResponse("/excelsheets/GetActorsByIdResponse_csv.csv", "Main"));
     }
 
     @Features("API")
@@ -469,10 +468,10 @@ public class TestSoapService extends APIBaseTest {
     @Title("validateResponse_WithXLSData")
     @Test(dependsOnMethods = "sendRequest")
     public void validateResponse_WithXLSData() {
-        sleep();
-        GetInfoByZip getInfo = new GetInfoByZip();
+
+        GetActorsById getInfo = new GetActorsById();
         getInfo.sendRequest();
-        Assert.assertTrue(getInfo.validateResponse("/excelsheets/GetInfoByZipResponse_xls.xls", "Main"));
+        Assert.assertTrue(getInfo.validateResponse("/excelsheets/GetActorsByIdResponse_xls.xls", "Main"));
     }
 
     @Features("API")
@@ -480,10 +479,10 @@ public class TestSoapService extends APIBaseTest {
     @Title("validateResponse_WithXLSXData")
     @Test(dependsOnMethods = "sendRequest")
     public void validateResponse_WithXLSXData() {
-        sleep();
-        GetInfoByZip getInfo = new GetInfoByZip();
+
+        GetActorsById getInfo = new GetActorsById();
         getInfo.sendRequest();
-        Assert.assertTrue(getInfo.validateResponse("/excelsheets/GetInfoByZipResponse_xlsx.xlsx", "Main"));
+        Assert.assertTrue(getInfo.validateResponse("/excelsheets/GetActorsByIdResponse_xlsx.xlsx", "Main"));
     }
 
     @Features("API")
@@ -491,13 +490,10 @@ public class TestSoapService extends APIBaseTest {
     @Title("validateResponse_WithError")
     @Test(dependsOnMethods = "sendRequest")
     public void validateResponse_WithErrors() {
-        sleep();
-        GetInfoByZip getInfo = new GetInfoByZip();
+
+        GetActorsById getInfo = new GetActorsById();
         getInfo.sendRequest();
-        Assert.assertFalse(getInfo.validateResponse("/excelsheets/GetInfoByZipResponse_ExpectErrors.csv", "Main"));
+        Assert.assertFalse(getInfo.validateResponse("/excelsheets/GetActorsByIdResponse_ExpectErrors.csv", "Main"));
     }
 
-    private void sleep() {
-        Sleeper.sleep(1000);
-    }
 }

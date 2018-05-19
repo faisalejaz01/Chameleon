@@ -1,0 +1,4 @@
+Main,Xpath,Value
+,"	/Envelope/Body/getActorsByIdResponse/actor/actor_i",1
+,"	/Envelope/Body/getActorsByIdResponse/actor/first_nae",[A-Z]{2}
+,"	/Envelope/Body/getActorsByIdResponse/actor/last_nam",Guiness

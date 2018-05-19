@@ -5,18 +5,18 @@ import java.util.Map;
 
 /**
  * A simple converter to get state names or codes. Also contains Canadian and other values
- * 
+ *
  * @author Justin Phlegar
  * @version 12/07/2015 Justin Phlegar - original
  */
 public class StateMapper {
     // Mapping containers
-    private static Map<String, String> stateNameToCode = new HashMap<String, String>();
-    private static Map<String, String> stateCodeToName = new HashMap<String, String>();
+    private static Map<String, String> stateNameToCode = new HashMap<>();
+    private static Map<String, String> stateCodeToName = new HashMap<>();
 
     /**
      * Get the state code/abbreviation by the state/province name
-     * 
+     *
      * @author Justin Phlegar
      * @version 12/07/2015 Justin Phlegar - original
      * @param name
@@ -30,7 +30,7 @@ public class StateMapper {
 
     /**
      * Get the state/province name by the state code/abbreviation
-     * 
+     *
      * @author Justin Phlegar
      * @version 12/07/2015 Justin Phlegar - original
      * @param code
