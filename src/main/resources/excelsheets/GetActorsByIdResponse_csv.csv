@@ -1,0 +1,4 @@
+Main,	Xpath,	Value
+	/Envelope/Body/getActorsByIdResponse/actor/actor_id,	1
+	/Envelope/Body/getActorsByIdResponse/actor/first_name,	[A-Z]+
+	/Envelope/Body/getActorsByIdResponse/actor/last_name,	[A-Z]+

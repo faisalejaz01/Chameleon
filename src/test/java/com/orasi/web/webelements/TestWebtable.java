@@ -21,11 +21,11 @@ import ru.yandex.qatools.allure.annotations.Title;
 public class TestWebtable extends WebBaseTest {
     OrasiDriver driver = null;
 
-    private String xpath = "//div[6]/table";
+    private String xpath = "//table";
 
     @BeforeClass(groups = { "regression", "interfaces", "webtable", "dev" })
     public void setup() {
-        setPageURL("http://www.iupui.edu/~webtrain/tutorials/tables.html");
+        setPageURL("http://orasi.github.io/Chameleon/sites/unitTests/orasi/core/interfaces/webtable.html");
     }
 
     @Override
@@ -70,7 +70,7 @@ public class TestWebtable extends WebBaseTest {
     @Test(groups = { "regression", "interfaces", "webtable" }, dependsOnMethods = "constructorWithElement")
     public void getCell() {
         Webtable webtable = driver.findWebtable(By.xpath(xpath));
-        Assert.assertTrue(webtable.getCell(2, 2).getText().equals("Office Supplies"));
+        Assert.assertTrue(webtable.getCell(2, 2).getText().equals("Sylvester"));
 
     }
 
@@ -80,7 +80,7 @@ public class TestWebtable extends WebBaseTest {
     @Test(groups = { "regression", "interfaces", "webtable" }, dependsOnMethods = "constructorWithElement")
     public void getCellData() {
         Webtable webtable = driver.findWebtable(By.xpath(xpath));
-        Assert.assertTrue(webtable.getCellData(2, 2).equals("Office Supplies"));
+        Assert.assertTrue(webtable.getCellData(2, 2).equals("Sylvester"));
     }
 
     @Features("Element Interfaces")
@@ -89,7 +89,7 @@ public class TestWebtable extends WebBaseTest {
     @Test(groups = { "regression", "interfaces", "webtable" }, dependsOnMethods = "constructorWithElement")
     public void getColumnCount() {
         Webtable webtable = driver.findWebtable(By.xpath(xpath));
-        Assert.assertTrue(webtable.getColumnCount(1) == 3);
+        Assert.assertTrue(webtable.getColumnCount(1) == 5);
     }
 
     @Features("Element Interfaces")
@@ -98,7 +98,7 @@ public class TestWebtable extends WebBaseTest {
     @Test(groups = { "regression", "interfaces", "webtable" }, dependsOnMethods = "constructorWithElement")
     public void getColumnWithCellText() {
         Webtable webtable = driver.findWebtable(By.xpath(xpath));
-        Assert.assertTrue(webtable.getColumnWithCellText("Supplies and Expenses") == 1);
+        Assert.assertTrue(webtable.getColumnWithCellText("Last Name") == 3);
     }
 
     @Features("Element Interfaces")
@@ -107,7 +107,7 @@ public class TestWebtable extends WebBaseTest {
     @Test(groups = { "regression", "interfaces", "webtable" }, dependsOnMethods = "constructorWithElement")
     public void getColumnWithCellTextUsingRow() {
         Webtable webtable = driver.findWebtable(By.xpath(xpath));
-        Assert.assertTrue(webtable.getColumnWithCellText("$xx,xxx", 7) == 3);
+        Assert.assertTrue(webtable.getColumnWithCellText("Agassi", 5) == 3);
     }
 
     @Features("Element Interfaces")
@@ -134,7 +134,7 @@ public class TestWebtable extends WebBaseTest {
     @Test(groups = { "regression", "interfaces", "webtable" }, dependsOnMethods = "constructorWithElement")
     public void getRowWithCellText() {
         Webtable webtable = driver.findWebtable(By.xpath(xpath));
-        Assert.assertTrue(webtable.getRowWithCellText("Mailing") == 5);
+        Assert.assertTrue(webtable.getRowWithCellText("Schwarzenegger") == 6);
     }
 
     @Features("Element Interfaces")
@@ -143,7 +143,7 @@ public class TestWebtable extends WebBaseTest {
     @Test(groups = { "regression", "interfaces", "webtable" }, dependsOnMethods = "constructorWithElement")
     public void getRowWithCellTextSpecifiedColumn() {
         Webtable webtable = driver.findWebtable(By.xpath(xpath));
-        Assert.assertTrue(webtable.getRowWithCellText("13.", 1) == 5);
+        Assert.assertTrue(webtable.getRowWithCellText("Movie", 5) == 2);
     }
 
     @Features("Element Interfaces")
@@ -152,7 +152,7 @@ public class TestWebtable extends WebBaseTest {
     @Test(groups = { "regression", "interfaces", "webtable" }, dependsOnMethods = "constructorWithElement")
     public void getRowWithCellTextSpecifiedRowAndColumn() {
         Webtable webtable = driver.findWebtable(By.xpath(xpath));
-        Assert.assertTrue(webtable.getRowWithCellText("14.", 1, 2) == 6);
+        Assert.assertTrue(webtable.getRowWithCellText("Male", 4, 4) == 5);
     }
 
     @Features("Element Interfaces")
@@ -161,7 +161,7 @@ public class TestWebtable extends WebBaseTest {
     @Test(groups = { "regression", "interfaces", "webtable" }, dependsOnMethods = "constructorWithElement")
     public void getRowWithCellTextNotExact() {
         Webtable webtable = driver.findWebtable(By.xpath(xpath));
-        Assert.assertTrue(webtable.getRowWithCellText("duplICatING", 2, 2, false) == 4);
+        Assert.assertTrue(webtable.getRowWithCellText("SpOrT", 5, 3, false) == 5);
     }
 
     @Features("Element Interfaces")
@@ -179,6 +179,6 @@ public class TestWebtable extends WebBaseTest {
     @Test(groups = { "regression", "interfaces", "webtable" }, dependsOnMethods = "constructorWithElement")
     public void getRowWithCellTextNoColumn() {
         Webtable webtable = driver.findWebtable(By.xpath(xpath));
-        Assert.assertTrue(webtable.getRowWithCellText("Supplies and Expenses", -1, 2, false) == 7);
+        Assert.assertTrue(webtable.getRowWithCellText("Science", -1, 2, false) == 4);
     }
 }

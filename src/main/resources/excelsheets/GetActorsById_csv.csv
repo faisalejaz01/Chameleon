@@ -1,0 +1,2 @@
+Main,Xpath,Value
+,/Envelope/Body/getActorsByIdRequest/actor_id,1

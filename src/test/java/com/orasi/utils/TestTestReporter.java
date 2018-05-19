@@ -18,7 +18,7 @@ import com.orasi.api.restServices.RestResponse;
 import com.orasi.api.restServices.RestService;
 import com.orasi.api.restServices.exceptions.RestException;
 import com.orasi.api.soapServices.exceptions.SoapException;
-import com.orasi.api.soapServices.helpers.GetInfoByZip;
+import com.orasi.api.soapServices.helpers.GetActorsById;
 import com.orasi.web.OrasiDriver;
 
 public class TestTestReporter extends BaseTest {
@@ -404,7 +404,7 @@ public class TestTestReporter extends BaseTest {
     @Test
     public void logAPISoapPass() {
         String log = "logAPISoap";
-        GetInfoByZip getInfo = new GetInfoByZip();
+        GetActorsById getInfo = new GetActorsById();
         getInfo.sendRequest();
         TestReporter.logAPI(true, log, getInfo);
     }
@@ -412,7 +412,7 @@ public class TestTestReporter extends BaseTest {
     @Test(expectedExceptions = SoapException.class)
     public void logAPISoapFail() {
         String log = "logAPISoap";
-        GetInfoByZip getInfo = new GetInfoByZip();
+        GetActorsById getInfo = new GetActorsById();
         getInfo.sendRequest();
         TestReporter.logAPI(false, log, getInfo);
     }

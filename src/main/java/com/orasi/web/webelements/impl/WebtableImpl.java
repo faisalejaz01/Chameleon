@@ -2,10 +2,12 @@ package com.orasi.web.webelements.impl;
 
 import static com.orasi.utils.TestReporter.logTrace;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import com.orasi.web.OrasiDriver;
 import com.orasi.web.webelements.Element;
@@ -30,7 +32,9 @@ public class WebtableImpl extends ElementImpl implements Webtable {
     private List<Element> getRowCollection() {
         logTrace("Entering WebtableImpl#getRowCollection");
         driver.setElementTimeout(1, TimeUnit.SECONDS);
-        List<Element> rowCollection = reload().findElements(By.xpath("tr|tbody/tr"));
+        List<WebElement> elements = getWrappedElement().findElements(By.xpath("tr|tbody/tr"));
+        List<Element> rowCollection = new ArrayList<>();
+        elements.forEach(row -> rowCollection.add(new ElementImpl(driver, by, row)));
         driver.setElementTimeout(driver.getElementTimeout(), TimeUnit.SECONDS);
         logTrace("Exiting WebtableImpl#getRowCollection");
         return rowCollection;
