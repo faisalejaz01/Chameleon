@@ -9,10 +9,12 @@ import com.orasi.DriverManager;
 import com.orasi.DriverManagerFactory;
 import com.orasi.DriverType;
 import com.orasi.web.OrasiDriver;
+import com.orasi.web.WebBaseTest;
 import com.salesforce.api.domain.Account;
+import com.salesforce.api.rest.manager.AccountsManager;
 import com.salesforce.api.rest.manager.SalesforceObjectManager;
 
-public class Sandbox {
+public class Sandbox extends WebBaseTest {
     By txtUser = By.id("username");
     By txtPass = By.id("password");
     By btnLogin = By.id("Login");
@@ -32,8 +34,9 @@ public class Sandbox {
         account.setDescription("This account was created via REST automation");
         account.setPhone("3363363366");
 
+        SalesforceObjectManager salesforce = SalesforceObjectManager.getInstance();
         SalesforceObjectManager.getInstance().accounts().createAccount(account);
-
+        AccountsManager.getInstance();
         DriverManagerFactory.getManager(DriverType.CHROME).initalizeDriver();
         OrasiDriver driver = DriverManager.getDriver();
         driver.debug().setHighlightOnSync(true);

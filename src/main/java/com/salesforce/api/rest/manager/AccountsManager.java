@@ -10,7 +10,15 @@ import com.salesforce.api.rest.processor.AccountProcessor;
 
 public class AccountsManager {
     private AccountProcessor processor = new AccountProcessor();
+    private static ThreadLocal<AccountsManager> instance = new ThreadLocal<>();
     private List<Account> accounts = new ArrayList<>();
+
+    public static AccountsManager getInstance() {
+        if (instance == null || instance.get() == null) {
+            instance.set(new AccountsManager());
+        }
+        return instance.get();
+    }
 
     public Account createDefaultAccount() {
         return createDefaultAccount("REST API Test");

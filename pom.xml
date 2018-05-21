@@ -63,6 +63,12 @@
 		</repository>
 	</distributionManagement>
 	<dependencies>
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.11</version>
+</dependency>
+	
 		<!-- Start Selenium requirements -->
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
