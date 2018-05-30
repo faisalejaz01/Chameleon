@@ -1,0 +1,16 @@
+package com.chameleon.web.exceptions;
+
+import com.chameleon.web.ExtendedWebDriver;
+import com.chameleon.web.WebException;
+
+public class ElementAttributeValueNotMatchingException extends WebException {
+    private static final long serialVersionUID = 3407361723082329697L;
+
+    public ElementAttributeValueNotMatchingException(String message) {
+        super(message);
+    }
+
+    public ElementAttributeValueNotMatchingException(String message, ExtendedWebDriver driver) {
+        super(message, driver);
+    }
+}

@@ -9,7 +9,7 @@
  
     <test name="Element" parallel="methods" thread-count="10">
 		<classes>
-			<class name="com.orasi.web.webelements.TestListbox" />
+			<class name="com.chameleon.web.TestWindowHandler" />
 		</classes>
 	</test>
 </suite> <!-- Suite -->
