@@ -100,7 +100,7 @@ public class TestLink extends WebBaseTest {
             throw new SkipException("Test not valid for Internet Explorer");
         }
         Link link = driver.findLink(By.xpath("//a[@href='hiddenLink.html']"));
-        Sleeper.sleep(1.0);
+        Sleeper.sleep(1000);
         driver.findLink(By.xpath("//a[@href='testLinks.html']")).click();
         boolean valid = false;
         try {

@@ -409,7 +409,7 @@ public class TestOrasiDriver extends WebBaseTest {
     public void executeAsyncJavaScript() {
 
         driver.get("http://cafetownsend-angular-rails.herokuapp.com/login");
-        Sleeper.sleep(3.0);
+        Sleeper.sleep(3000);
         driver.executeAsyncJavaScript(
                 "var callback = arguments[arguments.length - 1];angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
     }
@@ -453,7 +453,7 @@ public class TestOrasiDriver extends WebBaseTest {
     @Title("findNGRepeater")
     @Test(groups = { "regression", "utils", "orasidriver" }, dependsOnMethods = "findNGController")
     public void findNGRepeater() {
-        Sleeper.sleep(2.0);
+        Sleeper.sleep(2000);
         Assert.assertNotNull(driver.findElement(ByNG.repeater("employee in employees")));
     }
 

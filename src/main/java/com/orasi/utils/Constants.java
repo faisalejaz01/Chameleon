@@ -21,7 +21,6 @@ public class Constants {
     public final static int ELEMENT_TIMEOUT = 3;
     public final static int PAGE_TIMEOUT = 10;
     public final static int MILLISECONDS_TO_POLL_FOR_ELEMENT = 250;
-    public final static int MAX_SLEEP_TIME = 600;
 
     /*
      * Test constants
