@@ -54,7 +54,7 @@ public class Highlight {
 
     public static void flashHighlightSuccess(WebDriver driver, WebElement element) {
         highlight(driver, element, jsHighlight, defaultSuccessColor);
-        Sleeper.sleep(500);
+        Sleeper.sleep(0.5);
         highlight(driver, element, jsHighlight, Colors.NONE);
     }
 

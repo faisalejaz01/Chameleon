@@ -4,7 +4,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.chameleon.api.APIBaseTest;
-import com.chameleon.api.soapServices.SoapServiceCommands;
 import com.chameleon.api.soapServices.exceptions.HeaderNotFoundException;
 import com.chameleon.api.soapServices.exceptions.MissingFunctionParameterValueException;
 import com.chameleon.api.soapServices.exceptions.SoapException;

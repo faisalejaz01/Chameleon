@@ -406,7 +406,7 @@ public class TestExtendedWebDriver extends WebBaseTest {
     public void executeAsyncJavaScript() {
 
         driver.get("http://cafetownsend-angular-rails.herokuapp.com/login");
-        Sleeper.sleep(3000);
+        Sleeper.sleep(3.0);
         driver.executeAsyncJavaScript(
                 "var callback = arguments[arguments.length - 1];angular.element(document.body).injector().get('$browser').notifyWhenNoOutstandingRequests(callback);");
     }
@@ -450,7 +450,7 @@ public class TestExtendedWebDriver extends WebBaseTest {
     @Title("findNGRepeater")
     @Test(groups = { "regression", "utils", "ExtendedWebdriver" }, dependsOnMethods = "findNGController")
     public void findNGRepeater() {
-        Sleeper.sleep(2000);
+        Sleeper.sleep(2.0);
         Assert.assertNotNull(driver.findElement(ByNG.repeater("employee in employees")));
     }
 
